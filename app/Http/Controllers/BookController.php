@@ -1,0 +1,161 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Book;
+use App\Models\Category;
+use App\Models\BookCopy;
+use Illuminate\Http\Request;
+
+class BookController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $query = Book::with('category');
+        
+        // Search
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('author', 'like', "%{$search}%")
+                  ->orWhere('isbn', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filter by category
+        if ($request->has('category_id') && $request->category_id != '') {
+            $query->where('category_id', $request->category_id);
+        }
+        
+        $books = $query->orderBy('title')->paginate(10);
+        $categories = Category::orderBy('name')->get();
+        
+        return view('books.index', compact('books', 'categories'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $categories = Category::orderBy('name')->get();
+        return view('books.create', compact('categories'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'isbn' => 'required|string|max:50',
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'publication_year' => 'required|integer|min:1900|max:' . (date('Y') + 5),
+            'receipt_date' => 'required|date',
+            'quantity' => 'required|integer|min:1|max:1000',
+            'description' => 'nullable|string',
+        ]);
+
+        // 1. Buat buku
+        $book = Book::create([
+            'isbn' => $request->isbn,
+            'title' => $request->title,
+            'category_id' => $request->category_id,
+            'author' => $request->author,
+            'publisher' => $request->publisher,
+            'publication_year' => $request->publication_year,
+            'receipt_date' => $request->receipt_date,
+            'description' => $request->description,
+        ]);
+
+        // 2. Buat copies berdasarkan quantity
+        $book->createCopies($request->quantity);
+
+        return redirect()->route('books.index')
+            ->with('success', "Buku '{$book->title}' berhasil ditambahkan dengan {$request->quantity} copy.");
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Book $book)
+    {
+        $book->load(['category', 'copies']);
+        return view('books.show', compact('book'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Book $book)
+    {
+        $categories = Category::orderBy('name')->get();
+        return view('books.edit', compact('book', 'categories'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Book $book)
+    {
+        $request->validate([
+            'isbn' => 'required|string|max:50' . $book->id,
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'publication_year' => 'required|integer|min:1900|max:' . (date('Y') + 5),
+            'receipt_date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
+
+        $book->update($request->all());
+
+        return redirect()->route('books.index')
+            ->with('success', 'Buku berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Book $book)
+    {
+        $bookTitle = $book->title;
+        $copyCount = $book->copies()->count();
+        
+        $book->copies()->delete();
+        $book->delete();
+
+        $message = "Buku '{$bookTitle}' berhasil dihapus.";
+        if ($copyCount > 0) {
+            $message = "Buku '{$bookTitle}' dan {$copyCount} copy berhasil dihapus.";
+        }
+
+        return redirect()->route('books.index')
+            ->with('success', $message);
+    }
+    
+    /**
+     * Hapus single copy
+     */
+    public function deleteCopy(Book $book, BookCopy $copy)
+    {
+        if ($copy->status === 'borrowed') {
+            return redirect()->route('books.show', $book)
+                ->with('error', 'Tidak dapat menghapus copy yang sedang dipinjam.');
+        }
+
+        $inventoryNumber = $copy->formatted_inventory_number;
+        $copy->delete();
+
+        return redirect()->route('books.show', $book)
+            ->with('success', "Copy No. {$inventoryNumber} berhasil dihapus.");
+    }
+}

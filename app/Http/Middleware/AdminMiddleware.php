@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class AdminMiddleware
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        // Cek user login DAN is_admin = true
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Akses hanya untuk administrator');
+        }
+        
+        return $next($request);
+    }
+}

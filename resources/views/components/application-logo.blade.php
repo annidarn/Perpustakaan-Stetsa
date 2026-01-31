@@ -1,0 +1,1 @@
+<img src="/logo_stetsa.png" {{ $attributes }} alt="">
