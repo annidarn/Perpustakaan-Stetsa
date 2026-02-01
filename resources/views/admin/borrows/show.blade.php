@@ -315,10 +315,6 @@
                                     </button>
                                 </form>
                                 
-                                <a href="{{ route('admin.borrows.create') }}" 
-                                   class="w-full flex items-center justify-center text-black py-3 px-4 rounded-lg font-medium">
-                                    Buat Peminjaman Baru
-                                </a>
                             </div>
                         </div>
                     </div>
