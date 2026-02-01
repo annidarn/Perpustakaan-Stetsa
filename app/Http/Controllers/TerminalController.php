@@ -71,7 +71,7 @@ class TerminalController extends Controller
             ->get();
 
         if ($availableCopies->isEmpty()) {
-            return back()
+            return redirect()->route('terminal.index')
                 ->with('error', 'Maaf, tidak ada copy tersedia untuk buku ini.');
         }
 

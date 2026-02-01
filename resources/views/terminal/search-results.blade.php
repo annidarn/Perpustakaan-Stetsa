@@ -105,13 +105,16 @@
                     <div class="card overflow-hidden">
                         <!-- Book Cover Placeholder -->
                         <div class="h-48 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
-                            @if($book->copies->count() > 0)
+                            @php
+                                $availableCount = $book->copies->where('status', 'available')->count();
+                            @endphp
+                            @if($availableCount > 0)
                                 <div class="text-center">
                                     <i class="fas fa-book-open text-6xl text-blue-600 opacity-50"></i>
                                     <div class="mt-4">
                                         <span class="availability-badge bg-green-100 text-green-800">
                                             <i class="fas fa-check-circle mr-1"></i>
-                                            {{ $book->copies->count() }} copy tersedia
+                                            {{ $availableCount }} copy tersedia
                                         </span>
                                     </div>
                                 </div>
