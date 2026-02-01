@@ -113,33 +113,11 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        <div>
-                                            <div class="text-sm text-gray-500">Email Sistem</div>
-                                            <div class="font-medium text-sm">{{ $member->user->email }}</div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Account Information -->
-                            <div class="mb-8">
-                                <h3 class="text-lg font-semibold text-gray-700 mb-4">Informasi Akun</h3>
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <div class="text-sm text-gray-600 mb-2">
-                                        Akun ini dibuat untuk keperluan sistem. Siswa tidak dapat login, sedangkan guru/staff dapat login dengan:
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <div class="text-sm text-gray-500">Username/Email</div>
-                                            <div class="font-mono">{{ $member->user->email }}</div>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm text-gray-500">Password Default</div>
-                                            <div class="font-mono">password123</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
