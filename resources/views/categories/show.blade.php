@@ -5,11 +5,11 @@
                 Detail Kategori: {{ $category->notation }}
             </h2>
             <div class="space-x-2">
-                <a href="{{ route('categories.edit', $category) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                    Edit
+                <a href="{{ route('categories.edit', $category) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                    <i class="fas fa-edit mr-1"></i> Edit
                 </a>
-                <a href="{{ route('categories.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    ← Kembali
+                <a href="{{ route('categories.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
         </div>
@@ -60,8 +60,8 @@
                         <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Hapus kategori {{ $category->name }}? Tindakan ini tidak dapat dibatalkan.')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                Hapus Kategori
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                                <i class="fas fa-trash mr-1"></i> Hapus Kategori
                             </button>
                         </form>
                     </div>

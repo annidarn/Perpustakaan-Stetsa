@@ -4,8 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Tambah Anggota Baru
             </h2>
-            <a href="{{ route('members.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                ← Kembali
+            <a href="{{ route('members.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                <i class="fas fa-arrow-left mr-1"></i> Kembali
             </a>
         </div>
     </x-slot>
@@ -213,12 +213,12 @@
                         <!-- Form Actions -->
                         <div class="flex justify-end space-x-4">
                             <a href="{{ route('members.index') }}" 
-                               class="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
+                               class="px-6 py-3 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
                                 Batal
                             </a>
                             <button type="submit" 
-                                    class="px-6 py-3 bg-blue-600 text-black rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                Simpan Anggota
+                                    class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm transition-colors">
+                                <i class="fas fa-save mr-2"></i> Simpan Anggota
                             </button>
                         </div>
                     </form>

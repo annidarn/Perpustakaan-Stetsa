@@ -59,7 +59,7 @@
         <div class="flex items-center justify-between mb-8">
             <div>
                 <a href="{{ route('terminal.index') }}" 
-                   class="inline-flex items-center text-white hover:text-gray-200 mb-2">
+                   class="inline-flex items-center text-white hover:text-gray-200 mb-2 bg-gray-500/50 px-3 py-1.5 rounded-md backdrop-blur-sm transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali
                 </a>
                 <h1 class="text-2xl md:text-3xl font-bold text-white">
@@ -370,14 +370,14 @@
                         <!-- Action Buttons -->
                         <div class="space-y-3">
                             <button type="submit" 
-                                    class="w-full btn-primary text-white py-4 rounded-lg font-bold text-lg">
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-lg font-bold text-lg shadow-sm transition-colors">
                                 <i class="fas fa-check-circle mr-2"></i>
                                 Konfirmasi Peminjaman
                             </button>
                             
                             <a href="{{ route('terminal.index') }}" 
-                               class="w-full block text-center py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-                                Batalkan
+                               class="w-full block text-center py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow-sm transition-colors">
+                                <i class="fas fa-times mr-2"></i> Batalkan
                             </a>
                         </div>
                     </form>

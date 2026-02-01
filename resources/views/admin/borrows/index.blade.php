@@ -11,8 +11,8 @@
             </div>
             <div class="flex space-x-2">
                 <a href="{{ route('admin.borrows.create') }}" 
-                   class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
-                    Peminjaman Baru
+                   class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm flex items-center">
+                    <i class="fas fa-plus mr-2"></i> Peminjaman Baru
                 </a>
             </div>
         </div>
@@ -94,11 +94,11 @@
                             <!-- Action Buttons -->
                             <div class="flex items-end space-x-2">
                                 <button type="submit" 
-                                        class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     <i class="fas fa-filter mr-1"></i> Filter
                                 </button>
                                 <a href="{{ route('admin.borrows.index') }}" 
-                                   class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                                   class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     Reset
                                 </a>
                             </div>
@@ -228,7 +228,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex space-x-2">
                                             <a href="{{ route('admin.borrows.show', $borrow) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200 text-sm">
+                                               class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors text-sm">
                                                 <i class="fas fa-eye mr-1"></i> Detail
                                             </a>
                                             
@@ -236,7 +236,7 @@
                                             <form action="{{ route('admin.borrows.extend', $borrow) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" 
-                                                        class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-800 rounded-md hover:bg-green-200 text-sm"
+                                                        class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm transition-colors text-sm"
                                                         onclick="return confirm('Perpanjang peminjaman 7 hari?')">
                                                     <i class="fas fa-redo mr-1"></i> Perpanjang
                                                 </button>
@@ -247,7 +247,7 @@
                                             <form action="{{ route('admin.borrows.mark-paid', $borrow) }}" method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit" 
-                                                        class="inline-flex items-center px-3 py-1.5 bg-purple-100 text-purple-800 rounded-md hover:bg-purple-200 text-sm"
+                                                        class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm shadow-sm transition-colors"
                                                         onclick="return confirm('Tandai denda sebagai lunas?')">
                                                     <i class="fas fa-check mr-1"></i> Lunas
                                                 </button>

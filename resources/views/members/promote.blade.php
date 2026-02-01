@@ -11,7 +11,7 @@
             </div>
             <div class="flex space-x-2">
                 <a href="{{ route('members.index') }}" 
-                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
@@ -272,7 +272,7 @@
                         <div class="mb-6">
                             <button type="button" 
                                     onclick="previewPromotion()"
-                                    class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-3 px-4 rounded-lg font-medium">
+                                    class="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 px-4 rounded-lg font-medium shadow-sm transition-colors">
                                 <i class="fas fa-eye mr-2"></i> Preview Perubahan
                             </button>
                         </div>
@@ -284,7 +284,7 @@
                                 Batal
                             </a>
                             <button type="submit" 
-                                    class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium"
+                                    class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium shadow-sm transition-colors"
                                     onclick="return confirm('Proses naik kelas massal? Tindakan ini tidak dapat dibatalkan.')">
                                 <i class="fas fa-play mr-2"></i> Jalankan Naik Kelas
                             </button>

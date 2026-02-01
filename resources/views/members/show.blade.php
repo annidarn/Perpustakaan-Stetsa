@@ -6,12 +6,12 @@
             </h2>
             <div class="flex space-x-2">
                 <a href="{{ route('members.edit', $member) }}" 
-                   class="bg-yellow-500 hover:bg-yellow-700 text-black font-bold py-2 px-4 rounded">
+                   class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </a>
                 <a href="{{ route('members.index') }}" 
-                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    ← Kembali
+                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
         </div>
@@ -164,7 +164,7 @@
                             <div class="space-y-3">
                                 @if($member->status === 'active')
                                     <a href="#" 
-                                       class="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-black rounded-md hover:bg-blue-700">
+                                       class="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
                                         <i class="fas fa-book-reader mr-2"></i>
                                         Buat Peminjaman Baru
                                     </a>
@@ -175,7 +175,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            class="w-full flex items-center justify-center px-4 py-3 bg-red-600 text-black rounded-md hover:bg-red-700">
+                                            class="w-full flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors">
                                         <i class="fas fa-trash mr-2"></i>
                                         Hapus Anggota
                                     </button>
@@ -188,7 +188,7 @@
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="inactive">
                                         <button type="submit" 
-                                                class="w-full flex items-center justify-center px-4 py-3 bg-yellow-600 text-black rounded-md hover:bg-yellow-700">
+                                                class="w-full flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors">
                                             <i class="fas fa-user-slash mr-2"></i>
                                             Nonaktifkan Akun
                                         </button>
@@ -199,7 +199,7 @@
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="active">
                                         <button type="submit" 
-                                                class="w-full flex items-center justify-center px-4 py-3 bg-green-600 text-black rounded-md hover:bg-green-700">
+                                                class="w-full flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 shadow-sm transition-colors">
                                             <i class="fas fa-user-check mr-2"></i>
                                             Aktifkan Kembali
                                         </button>
@@ -210,7 +210,7 @@
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="active">
                                         <button type="submit" 
-                                                class="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-black rounded-md hover:bg-blue-700">
+                                                class="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
                                             <i class="fas fa-graduation-cap mr-2"></i>
                                             Aktifkan Kembali (Alumni → Aktif)
                                         </button>

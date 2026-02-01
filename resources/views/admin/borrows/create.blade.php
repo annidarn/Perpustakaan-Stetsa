@@ -11,7 +11,7 @@
             </div>
             <div class="flex space-x-2">
                 <a href="{{ route('admin.borrows.index') }}" 
-                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
@@ -285,12 +285,12 @@
                         <!-- Form Actions -->
                         <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                             <a href="{{ route('admin.borrows.index') }}" 
-                               class="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
+                               class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-md shadow-sm transition-colors">
                                 Batal
                             </a>
                             <button type="submit" 
                                     id="submitBtn"
-                                    class="px-6 py-3 bg-blue-600 text-black rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm transition-colors">
                                 <i class="fas fa-save mr-2"></i> Simpan Peminjaman
                             </button>
                         </div>

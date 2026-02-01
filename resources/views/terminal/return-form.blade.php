@@ -61,7 +61,7 @@
         <div class="flex items-center justify-between mb-8">
             <div>
                 <a href="{{ route('terminal.index') }}" 
-                   class="inline-flex items-center text-white hover:text-gray-200 mb-2">
+                   class="inline-flex items-center text-white hover:text-gray-200 mb-2 bg-gray-500/50 px-3 py-1.5 rounded-md backdrop-blur-sm transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali
                 </a>
                 <h1 class="text-2xl md:text-3xl font-bold text-white">
@@ -185,12 +185,12 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a href="{{ route('terminal.index') }}" 
-                           class="px-6 py-4 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 text-center font-medium">
+                           class="px-6 py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 text-center font-medium shadow-sm transition-colors">
                             <i class="fas fa-home mr-2"></i> Kembali
                         </a>
                         
                         <button type="submit" 
-                                class="flex-1 px-6 py-4 btn-primary text-white rounded-xl font-bold text-lg">
+                                class="flex-1 px-6 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-lg shadow-sm transition-colors">
                             <i class="fas fa-check-circle mr-2"></i> Proses Pengembalian
                         </button>
                     </div>

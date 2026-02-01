@@ -4,8 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Tambah Buku Baru
             </h2>
-            <a href="{{ route('books.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                ← Kembali
+            <a href="{{ route('books.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                <i class="fas fa-arrow-left mr-1"></i> Kembali
             </a>
         </div>
     </x-slot>
@@ -144,12 +144,11 @@
                             @enderror
                         </div>
 
-                        <!-- Tombol Submit -->
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <div class="flex justify-end">
                                 <button type="submit" 
-                                        class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-6 rounded">
-                                    Simpan Buku
+                                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow-sm transition-colors">
+                                    <i class="fas fa-save mr-2"></i> Simpan Buku
                                 </button>
                             </div>
                         </div>

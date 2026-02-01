@@ -6,13 +6,13 @@
             </h2>
             <div class="space-x-2">
                 <a href="{{ route('books.show', $book) }}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200">
-                    <i class="fas fa-eye mr-1"></i>
+                   class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
+                    <i class="fas fa-eye mr-2"></i>
                     <span>Detail Buku</span>
                 </a>
                 <a href="{{ route('books.index') }}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200">
-                    <i class="fas fa-arrow-left mr-1"></i>
+                   class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali</span>
                 </a>
             </div>
@@ -157,12 +157,12 @@
                                 </div>
                                 <div class="flex space-x-4">
                                     <a href="{{ route('books.show', $book) }}" 
-                                       class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded">
+                                       class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded shadow-sm transition-colors">
                                         Batal
                                     </a>
                                     <button type="submit" 
-                                            class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-6 rounded">
-                                        Update Buku
+                                            class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow-sm transition-colors">
+                                        <i class="fas fa-save mr-2"></i> Update Buku
                                     </button>
                                 </div>
                             </div>

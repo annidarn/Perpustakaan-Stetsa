@@ -17,11 +17,11 @@
             </div>
             <div class="flex space-x-2">
                 <a href="{{ route('admin.borrows.edit', $borrow) }}" 
-                   class="bg-yellow-500 hover:bg-yellow-700 text-black font-bold py-2 px-4 rounded">
+                   class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded shadow-sm">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </a>
                 <a href="{{ route('admin.borrows.index') }}" 
-                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                   class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
@@ -242,7 +242,7 @@
                                             <form action="{{ route('admin.borrows.mark-paid', $borrow) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" 
-                                                        class="w-full bg-green-600 hover:bg-green-700 text-black py-2 px-4 rounded-lg font-medium"
+                                                        class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium shadow-sm transition-colors"
                                                         onclick="return confirm('Tandai denda sebagai lunas?')">
                                                     <i class="fas fa-check-circle mr-1"></i> Tandai Lunas
                                                 </button>
@@ -299,8 +299,8 @@
                                 </form>
                                 
                                 <a href="{{ route('admin.borrows.edit', $borrow) }}" 
-                                   class="w-full flex items-center justify-center text-black py-3 px-4 rounded-lg font-medium">
-                                    Edit Data
+                                   class="w-full flex items-center justify-center bg-amber-500 hover:bg-amber-600 text-white py-3 px-4 rounded-lg font-medium shadow-sm transition-colors">
+                                    <i class="fas fa-edit mr-2"></i> Edit Data
                                 </a>
                                 @endif
                                 
@@ -309,15 +309,15 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            class="w-full flex items-center justify-center text-black py-3 px-4 rounded-lg font-medium"
+                                            class="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-medium shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                                             {{ $borrow->status !== 'returned' ? 'disabled' : '' }}>
-                                        Hapus Peminjaman 
+                                        <i class="fas fa-trash mr-2"></i> Hapus Peminjaman 
                                     </button>
                                 </form>
 
                                 <a href="{{ route('admin.borrows.create') }}" 
-                                   class="w-full flex items-center justify-center text-black py-3 px-4 rounded-lg font-medium">
-                                    Buat Peminjaman Baru
+                                   class="w-full flex items-center justify-center bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium shadow-sm transition-colors">
+                                    <i class="fas fa-plus mr-2"></i> Buat Peminjaman Baru
                                 </a>
                                 
                             </div>

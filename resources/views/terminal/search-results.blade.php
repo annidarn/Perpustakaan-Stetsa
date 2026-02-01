@@ -48,7 +48,7 @@
         <div class="flex justify-between items-center mb-8">
             <div>
                 <a href="{{ route('terminal.index') }}" 
-                   class="inline-flex items-center text-white hover:text-gray-200 mb-2">
+                   class="inline-flex items-center text-white hover:text-gray-200 mb-2 bg-gray-500/50 px-3 py-1.5 rounded-md backdrop-blur-sm transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali
                 </a>
                 <h1 class="text-2xl md:text-3xl font-bold text-white">
@@ -153,7 +153,7 @@
                             <!-- Action Buttons -->
                             <div class="flex space-x-2">
                                 <button onclick="showBorrowModal('{{ $book->id }}', '{{ addslashes($book->title) }}')"
-                                        class="flex-1 btn-borrow text-white py-3 rounded-lg font-medium text-center">
+                                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium text-center shadow-sm transition-colors">
                                     <i class="fas fa-cart-plus mr-2"></i> Pinjam Buku
                                 </button>
                             </div>
@@ -182,11 +182,11 @@
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <a href="{{ route('terminal.index') }}" 
-                       class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                       class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 shadow-sm transition-colors">
                         <i class="fas fa-home mr-2"></i> Kembali
                     </a>
                     <button onclick="window.history.back()"
-                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                            class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 shadow-sm transition-colors">
                         <i class="fas fa-undo mr-2"></i> Coba Kata Kunci Lain
                     </button>
                 </div>
@@ -236,12 +236,12 @@
                     <div class="flex justify-end space-x-3">
                         <button type="button" 
                                 onclick="closeBorrowModal()"
-                                class="px-5 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-                            Batal
+                                class="px-5 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow-sm transition-colors">
+                            <i class="fas fa-times mr-2"></i> Batal
                         </button>
                         <button type="submit" 
                                 id="submitBorrowBtn"
-                                class="px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                class="px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
                             <i class="fas fa-check mr-2"></i> Lanjutkan
                         </button>
                     </div>

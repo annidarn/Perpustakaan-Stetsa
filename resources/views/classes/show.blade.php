@@ -6,12 +6,12 @@
             </h2>
             <div class="space-x-2">
                 <a href="{{ route('classes.edit', $class) }}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-md hover:bg-yellow-200">
+                   class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
                     <i class="fas fa-edit mr-1"></i>
                     <span>Edit</span>
                 </a>
                 <a href="{{ route('classes.index') }}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200">
+                   class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-1"></i>
                     <span>Kembali</span>
                 </a>
@@ -115,7 +115,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" 
-                                    class="inline-flex items-center px-4 py-2 bg-red-100 text-red-800 rounded-md hover:bg-red-200">
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors">
                                 <i class="fas fa-trash mr-2"></i>
                                 <span>Hapus Kelas</span>
                             </button>

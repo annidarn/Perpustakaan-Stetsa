@@ -118,7 +118,7 @@
                            required
                            autofocus>
                     <button type="submit" 
-                            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded-xl hover:opacity-90 transition">
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 shadow-sm transition-colors">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -132,7 +132,7 @@
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <a href="#" 
-               class="bg-gradient-to-r from-green-500 to-teal-600 text-white p-6 rounded-xl hover:shadow-lg transition shadow-md">
+               class="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 shadow-md transition-colors">
                 <div class="flex items-center">
                     <div class="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center mr-4">
                         <i class="fas fa-user-plus text-2xl"></i>
@@ -145,7 +145,7 @@
             </a>
             
             <a href="{{ route('terminal.return.form') }}" 
-               class="bg-gradient-to-r from-red-500 to-pink-600 text-white p-6 rounded-xl hover:shadow-lg transition shadow-md">
+               class="bg-red-600 text-white p-6 rounded-xl hover:bg-red-700 shadow-md transition-colors">
                 <div class="flex items-center">
                     <div class="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center mr-4">
                         <i class="fas fa-undo-alt text-2xl"></i>

@@ -4,8 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Daftar Buku
             </h2>
-            <a href="{{ route('books.create') }}" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
-                Tambah Buku
+            <a href="{{ route('books.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm flex items-center">
+                <i class="fas fa-plus mr-2"></i> Tambah Buku
             </a>
         </div>
     </x-slot>
@@ -43,11 +43,11 @@
                             <!-- Action Buttons -->
                             <div class="flex items-end space-x-2">
                                 <button type="submit" 
-                                        class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     <i class="fas fa-search mr-1"></i> Cari
                                 </button>
                                 <a href="{{ route('books.index') }}" 
-                                   class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                                   class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     Reset
                                 </a>
                             </div>
@@ -105,21 +105,21 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex space-x-2">
                                             <a href="{{ route('books.show', $book) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200">
+                                               class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm">
                                                 <i class="fas fa-eye mr-1"></i>
                                                 <span class="text-sm">Detail</span>
-                                            </a>
+                                             </a>
                                             <a href="{{ route('books.edit', $book) }}" 
-                                               class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-md hover:bg-yellow-200">
+                                               class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm">
                                                 <i class="fas fa-edit mr-1"></i>
                                                 <span class="text-sm">Edit</span>
-                                            </a>
+                                             </a>
                                             <form action="{{ route('books.destroy', $book) }}" method="POST" 
                                                   class="inline" onsubmit="return confirm('Hapus buku {{ $book->title }}?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-800 rounded-md hover:bg-red-200">
+                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm">
                                                     <i class="fas fa-trash mr-1"></i>
                                                     <span class="text-sm">Hapus</span>
                                                 </button>

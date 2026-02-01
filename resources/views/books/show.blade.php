@@ -6,13 +6,13 @@
             </h2>
             <div class="space-x-2">
                 <a href="{{ route('books.edit', $book) }}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-800 rounded-md hover:bg-yellow-200">
-                    <i class="fas fa-edit mr-1"></i>
+                   class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
+                    <i class="fas fa-edit mr-2"></i>
                     <span>Edit Buku</span>
                 </a>
                 <a href="{{ route('books.index') }}" 
-                   class="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200">
-                    <i class="fas fa-arrow-left mr-1"></i>
+                   class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali</span>
                 </a>
             </div>
@@ -177,7 +177,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" 
-                                                            class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700">
+                                                            class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 shadow-sm transition-colors">
                                                         Hapus
                                                     </button>
                                                 </form>
@@ -204,7 +204,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
-                                        class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium">
+                                        class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium shadow-sm transition-colors">
                                     <i class="fas fa-trash mr-2"></i>
                                     <span>Hapus Buku & Semua Copy</span>
                                 </button>
