@@ -131,7 +131,7 @@
 
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <a href="#" 
+            <!-- <a href="#" 
                class="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 shadow-md transition-colors">
                 <div class="flex items-center">
                     <div class="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center mr-4">
@@ -142,7 +142,7 @@
                         <p class="opacity-90">Pinjam buku dengan NIS/NIP</p>
                     </div>
                 </div>
-            </a>
+            </a> -->
             
             <a href="{{ route('terminal.return.form') }}" 
                class="bg-red-600 text-white p-6 rounded-xl hover:bg-red-700 shadow-md transition-colors">
