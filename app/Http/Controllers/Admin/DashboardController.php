@@ -20,7 +20,8 @@ class DashboardController extends Controller
             'total_books' => Book::count(),
             'available_copies' => BookCopy::where('status', 'available')->count(),
             'today_borrows' => Borrow::whereDate('borrow_date', today())->count(),
-            'active_borrows' => Borrow::where('status', 'borrowed')->count(),
+            'active_borrows' => Borrow::active()->count(),
+            'overdue_borrows' => Borrow::overdue()->count(),
             'total_fines' => Borrow::where('fine_amount', '>', 0)
                 ->where('fine_paid', false)
                 ->sum('fine_amount'),

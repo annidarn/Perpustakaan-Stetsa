@@ -82,6 +82,20 @@ class Borrow extends Model
             && Carbon::now()->lt($this->due_date);
     }
 
+    public function daysLate()
+    {
+        if ($this->status === 'returned') {
+            if (!$this->return_date) return 0;
+            return max(0, Carbon::parse($this->due_date)->startOfDay()->diffInDays(Carbon::parse($this->return_date)->startOfDay(), false));
+        }
+
+        if (Carbon::now()->lte($this->due_date)) {
+            return 0;
+        }
+
+        return Carbon::parse($this->due_date)->startOfDay()->diffInDays(Carbon::now()->startOfDay());
+    }
+
     /**
      * Hitung denda otomatis
      */

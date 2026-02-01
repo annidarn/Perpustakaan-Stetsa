@@ -206,7 +206,7 @@
                                                 {{ $borrow->status === 'borrowed' ? 'bg-yellow-100 text-yellow-800' : 
                                                    ($borrow->status === 'returned' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800') }}">
                                                 {{ $borrow->status === 'borrowed' ? 'Dipinjam' : 
-                                                   ($borrow->status === 'returned' ? 'Dikembalikan' : 'Terlambat') }}
+                                                   ($borrow->status === 'returned' ? 'Dikembalikan' : 'Terlambat (' . $borrow->daysLate() . ' hari)') }}
                                             </span>
                                             
                                             @if($borrow->extension_count > 0)
