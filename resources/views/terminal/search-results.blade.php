@@ -40,6 +40,14 @@
             padding: 4px 10px;
             border-radius: 20px;
         }
+
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-in {
+            animation: slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
     </style>
 </head>
 <body class="p-4 md:p-6">
@@ -61,8 +69,7 @@
             
             <!-- Search Again -->
             <div class="hidden md:block">
-                <form action="{{ route('terminal.search') }}" method="POST" class="flex">
-                    @csrf
+                <form action="{{ route('terminal.search') }}" method="GET" class="flex">
                     <input type="text" 
                     name="query" 
                     value="{{ old('query', request()->input('query')) }}"
@@ -78,8 +85,7 @@
 
         <!-- Mobile Search -->
         <div class="md:hidden mb-6">
-            <form action="{{ route('terminal.search') }}" method="POST" class="flex">
-                @csrf
+            <form action="{{ route('terminal.search') }}" method="GET" class="flex">
                 <input type="text" 
                        name="query" 
                        value="{{ request('query') }}"
@@ -194,7 +200,7 @@
         @endif
     </div>
 
-    <!-- Borrow Modal (will be implemented later) -->
+    <!-- Borrow Modal -->
     <div id="borrowModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div class="p-6">
@@ -212,7 +218,7 @@
                 
                 <form id="borrowForm" method="POST" action="{{ route('terminal.validate.member') }}">
                     @csrf
-                    <input type="hidden" name="book_id" id="bookId" value="">
+                    <input type="hidden" name="book_id" id="bookId" value="{{ old('book_id') }}">
                     
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -221,16 +227,13 @@
                         <input type="text" 
                             name="member_identifier" 
                             id="memberIdentifier"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            value="{{ old('member_identifier') }}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('member_identifier') border-red-500 bg-red-50 @enderror"
                             placeholder="Contoh: 10001 (NIS) atau T0001 (NIP)"
                             required>
                         <div class="mt-2 text-sm text-gray-500">
                             NIS untuk siswa, NIP untuk guru/staff
                         </div>
-                    </div>
-                    
-                    <div id="memberValidationResult" class="mb-6 hidden">
-                        <!-- Validation result will appear here -->
                     </div>
                     
                     <div class="flex justify-end space-x-3">
@@ -249,6 +252,28 @@
             </div>
         </div>
     </div>
+
+    <!-- Notifications -->
+    @if(session('error') || session('success') || $errors->any())
+    <div id="toast" class="fixed top-4 right-4 {{ session('error') || $errors->any() ? 'bg-red-600' : 'bg-green-600' }} text-white px-6 py-4 rounded-xl shadow-2xl animate-slide-in z-[100] border border-white/20 backdrop-blur-sm">
+        <div class="flex items-center space-x-3">
+            <i class="fas {{ session('error') || $errors->any() ? 'fa-exclamation-triangle' : 'fa-check-circle' }} text-xl"></i>
+            <div class="font-medium text-lg">
+                {{ session('error') ?? ($errors->any() ? $errors->first() : (session('success') ?? '')) }}
+            </div>
+        </div>
+    </div>
+    <script>
+        setTimeout(() => {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.classList.add('opacity-0', 'translate-x-20');
+                toast.style.transition = 'all 0.5s ease-out';
+                setTimeout(() => toast.remove(), 500);
+            }
+        }, 5000);
+    </script>
+    @endif
 
     <script>
     function showBorrowModal(bookId, bookTitle) {
@@ -273,13 +298,10 @@
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         
-        // Focus dan reset
-        const inputField = document.getElementById('memberIdentifier');
-        inputField.value = '';
-        inputField.focus();
+        // Focus
+        document.getElementById('memberIdentifier').focus();
         
-        // Reset validation
-        document.getElementById('memberValidationResult').classList.add('hidden');
+        // Reset validation but keep input if returning from error
         document.getElementById('submitBorrowBtn').disabled = false;
     }
     
@@ -287,38 +309,35 @@
         document.getElementById('borrowModal').classList.add('hidden');
         document.getElementById('borrowModal').classList.remove('flex');
         document.getElementById('memberIdentifier').value = '';
-        document.getElementById('memberValidationResult').classList.add('hidden');
         document.getElementById('submitBorrowBtn').disabled = false;
     }
     
-    function showBookDetails(bookId) {
-        // Will be implemented later
-        alert('Detail buku akan ditampilkan di sini');
-    }
+    // Modal Persistence on Error
+    @if(old('book_id') && (session('error') || $errors->any()))
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                showBorrowModal('{{ old("book_id") }}', 'Lanjutkan Peminjaman');
+            }, 100);
+        });
+    @endif
     
-    // Validasi input real-time (simple)
+    // Validasi input real-time
     function validateMemberIdentifier() {
         const identifier = document.getElementById('memberIdentifier').value;
         const submitBtn = document.getElementById('submitBorrowBtn');
-        
-        // Enable button jika input tidak kosong
         submitBtn.disabled = identifier.trim().length < 3;
     }
     
-    // Event listeners setelah DOM loaded
     document.addEventListener('DOMContentLoaded', function() {
-        // Real-time validation untuk input
         const memberInput = document.getElementById('memberIdentifier');
         if (memberInput) {
             memberInput.addEventListener('input', validateMemberIdentifier);
         }
         
-        // Close modal on ESC key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeBorrowModal();
         });
         
-        // Close modal when clicking outside
         const modal = document.getElementById('borrowModal');
         if (modal) {
             modal.addEventListener('click', (e) => {
@@ -326,6 +345,6 @@
             });
         }
     });
-</script>
+    </script>
 </body>
 </html>

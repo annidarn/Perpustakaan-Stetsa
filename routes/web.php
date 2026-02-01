@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
 // Public Terminal Routes (di luar middleware auth)
 Route::prefix('terminal')->name('terminal.')->group(function () {
     Route::get('/', [TerminalController::class, 'index'])->name('index');
-    Route::post('/search', [TerminalController::class, 'search'])->name('search');
+    Route::get('/search', [TerminalController::class, 'search'])->name('search');
     Route::post('/validate-member', [TerminalController::class, 'validateMember'])->name('validate.member');
     Route::get('/borrow/{member}/{book}', [TerminalController::class, 'showBorrowForm'])->name('borrow.form');
     Route::post('/borrow/{member}', [TerminalController::class, 'processBorrow'])->name('borrow.process');

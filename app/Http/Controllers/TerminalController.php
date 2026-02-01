@@ -26,10 +26,14 @@ class TerminalController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|min:2'
+            'query' => 'nullable|string'
         ]);
 
         $searchQuery = $request->input('query');
+
+        if (!$searchQuery) {
+            return redirect()->route('terminal.index');
+        }
 
         $books = Book::with(['category', 'copies' => function($query) {
                 $query->where('status', 'available');
@@ -56,8 +60,9 @@ class TerminalController extends Controller
         $validation = $this->validateMemberForBorrow($member);
         
         if (!$validation['can_borrow']) {
-            return redirect()->route('terminal.index')
-                ->with('error', $validation['message']);
+            return back()
+                ->with('error', $validation['message'])
+                ->withInput();
         }
 
         // Get available copies of this book
@@ -66,7 +71,7 @@ class TerminalController extends Controller
             ->get();
 
         if ($availableCopies->isEmpty()) {
-            return redirect()->route('terminal.search')
+            return back()
                 ->with('error', 'Maaf, tidak ada copy tersedia untuk buku ini.');
         }
 
@@ -87,8 +92,9 @@ class TerminalController extends Controller
         // Double-check member validation
         $validation = $this->validateMemberForBorrow($member);
         if (!$validation['can_borrow']) {
-            return redirect()->route('terminal.index')
-                ->with('error', $validation['message']);
+            return back()
+                ->with('error', $validation['message'])
+                ->withInput();
         }
 
         // Get book and copy === PERBAIKAN: DAPATKAN $book DARI $request ===
@@ -183,10 +189,11 @@ class TerminalController extends Controller
             ];
         }
 
-        // 3. Cek denda belum dibayar
+        // 3. Cek denda belum dibayar (Include returned but unpaid)
         $unpaidFines = $member->borrows()
-            ->where('status', 'overdue')
-            ->where('fine_paid', false)
+            ->where(function($q) {
+                $q->where('fine_paid', false)->orWhereNull('fine_paid');
+            })
             ->where('fine_amount', '>', 0)
             ->exists();
 
@@ -308,22 +315,25 @@ class TerminalController extends Controller
             'book_id' => 'required|exists:books,id'
         ]);
         
-        // Cari member berdasarkan NIS atau NIP
-        $member = Member::where('nis', $request->member_identifier)
-            ->orWhere('nip', $request->member_identifier)
+        // Cari member berdasarkan NIS atau NIP (trim for reliability)
+        $identifier = trim($request->member_identifier);
+        $member = Member::where('nis', $identifier)
+            ->orWhere('nip', $identifier)
             ->first();
         
         if (!$member) {
-            return redirect()->route('terminal.search')
-                ->with('error', 'Anggota dengan NIS/NIP tersebut tidak ditemukan.');
+            return back()
+                ->with('error', 'Anggota dengan NIS/NIP tersebut tidak ditemukan.')
+                ->withInput();
         }
         
         // Validasi apakah bisa meminjam
         $validation = $this->validateMemberForBorrow($member);
         
         if (!$validation['can_borrow']) {
-            return redirect()->route('terminal.search')
-                ->with('error', $validation['message']);
+            return back()
+                ->with('error', $validation['message'])
+                ->withInput();
         }
         
         // Redirect ke borrow form

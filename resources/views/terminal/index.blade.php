@@ -98,7 +98,7 @@
                     <div>
                         <div class="text-sm text-yellow-700 font-medium">Dipinjam Aktif</div>
                         <div class="text-2xl font-bold text-gray-800">
-                            {{ \App\Models\Borrow::where('status', 'borrowed')->count() }}
+                            {{ \App\Models\Borrow::active()->count() }}
                         </div>
                     </div>
                 </div>
@@ -108,8 +108,7 @@
         <!-- Main Search -->
         <div class="mb-10">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Cari Buku untuk Dipinjam</h2>
-            <form action="{{ route('terminal.search') }}" method="POST">
-                @csrf
+            <form action="{{ route('terminal.search') }}" method="GET">
                 <div class="relative">
                     <input type="text" 
                            name="query" 

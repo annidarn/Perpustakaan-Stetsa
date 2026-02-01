@@ -23,7 +23,9 @@ class DashboardController extends Controller
             'active_borrows' => Borrow::active()->count(),
             'overdue_borrows' => Borrow::overdue()->count(),
             'total_fines' => Borrow::where('fine_amount', '>', 0)
-                ->where('fine_paid', false)
+                ->where(function($q) {
+                    $q->where('fine_paid', false)->orWhereNull('fine_paid');
+                })
                 ->sum('fine_amount'),
         ];
 
