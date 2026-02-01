@@ -59,10 +59,9 @@ class TerminalController extends Controller
         // Validasi: cek apakah member bisa meminjam
         $validation = $this->validateMemberForBorrow($member);
         
-        if (!$validation['can_borrow']) {
-            return back()
-                ->with('error', $validation['message'])
-                ->withInput();
+        if (!$validation['can_borrow'] && !session('success')) {
+            return redirect()->route('terminal.index')
+                ->with('error', $validation['message']);
         }
 
         // Get available copies of this book
@@ -70,7 +69,7 @@ class TerminalController extends Controller
             ->where('status', 'available')
             ->get();
 
-        if ($availableCopies->isEmpty()) {
+        if ($availableCopies->isEmpty() && !session('success')) {
             return redirect()->route('terminal.index')
                 ->with('error', 'Maaf, tidak ada copy tersedia untuk buku ini.');
         }
@@ -92,9 +91,8 @@ class TerminalController extends Controller
         // Double-check member validation
         $validation = $this->validateMemberForBorrow($member);
         if (!$validation['can_borrow']) {
-            return back()
-                ->with('error', $validation['message'])
-                ->withInput();
+            return redirect()->route('terminal.index')
+                ->with('error', $validation['message']);
         }
 
         // Get book and copy === PERBAIKAN: DAPATKAN $book DARI $request ===

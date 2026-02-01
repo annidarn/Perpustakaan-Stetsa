@@ -106,7 +106,7 @@
                     </div>
                     
                     <!-- Pesan Penting -->
-                    <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                    <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
                         <div class="flex items-center">
                             <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
                             <span class="font-bold text-yellow-800">CATAT DAN SIMPAN KODE DI ATAS!</span>
@@ -114,6 +114,14 @@
                         <div class="mt-2 text-sm text-yellow-700">
                             Tanpa kode ini, tidak bisa melakukan pengembalian buku.
                         </div>
+                    </div>
+
+                    <!-- Tombol Selesai -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="{{ route('terminal.index') }}" 
+                           class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-4 rounded-lg font-bold shadow-lg transition-all transform hover:scale-[1.02]">
+                            <i class="fas fa-home mr-2"></i> Kembali ke Menu Utama
+                        </a>
                     </div>
                 </div>
             </div>
@@ -148,6 +156,7 @@
         </style>
         @endif
 
+        @if(!session('success'))
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left Column: Member & Book Info -->
             <div class="lg:col-span-2 space-y-6">
@@ -384,6 +393,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <script>
