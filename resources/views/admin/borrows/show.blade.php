@@ -75,7 +75,7 @@
                                     <div class="font-medium {{ $borrow->due_date->isPast() && $borrow->status !== 'returned' ? 'text-red-600' : 'text-green-600' }}">
                                         {{ $borrow->due_date->format('d F Y') }}
                                         @if($borrow->due_date->isPast() && $borrow->status !== 'returned')
-                                            (Terlambat {{ $borrow->due_date->diffInDays(now()) }} hari)
+                                            (Terlambat {{ (int) $borrow->due_date->diffInDays(now()) }} hari)
                                         @endif
                                     </div>
                                 </div>
@@ -257,7 +257,7 @@
                                         <div class="bg-gray-50 p-3 rounded-lg">
                                             <div class="flex justify-between mb-1">
                                                 <span>Terlambat:</span>
-                                                <span class="font-medium">{{ $borrow->due_date->diffInDays($borrow->return_date ?? now()) }} hari</span>
+                                                <span class="font-medium">{{ (int) $borrow->due_date->diffInDays($borrow->return_date ?? now()) }} hari</span>
                                             </div>
                                             <div class="flex justify-between mb-1">
                                                 <span>Tarif:</span>
