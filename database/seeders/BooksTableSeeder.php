@@ -27,6 +27,7 @@ class BooksTableSeeder extends Seeder
                 'author' => 'Dr. Budi Santoso, M.Pd.',
                 'publisher' => 'Erlangga',
                 'publication_year' => 2023,
+                'receipt_date' => '2023-01-15',
                 'description' => 'Buku matematika kurikulum terbaru untuk kelas 10',
             ],
             [
@@ -36,6 +37,7 @@ class BooksTableSeeder extends Seeder
                 'author' => 'Prof. Sari Wijaya, Ph.D.',
                 'publisher' => 'Yudhistira',
                 'publication_year' => 2023,
+                'receipt_date' => '2023-02-10',
                 'description' => 'Buku fisika dengan pendekatan praktis',
             ],
             [
@@ -45,6 +47,7 @@ class BooksTableSeeder extends Seeder
                 'author' => 'Dra. Ani Rahmawati',
                 'publisher' => 'Grafindo',
                 'publication_year' => 2022,
+                'receipt_date' => '2022-03-20',
                 'description' => 'Pembahasan biologi lengkap dengan ilustrasi',
             ],
             
@@ -56,6 +59,7 @@ class BooksTableSeeder extends Seeder
                 'author' => 'Andrea Hirata',
                 'publisher' => 'Bentang Pustaka',
                 'publication_year' => 2005,
+                'receipt_date' => '2020-05-12',
                 'description' => 'Novel tentang perjuangan anak-anak Belitung',
             ],
             [
@@ -65,6 +69,7 @@ class BooksTableSeeder extends Seeder
                 'author' => 'Pramoedya Ananta Toer',
                 'publisher' => 'Lentera Dipantara',
                 'publication_year' => 1980,
+                'receipt_date' => '2020-06-15',
                 'description' => 'Novel sejarah Indonesia',
             ],
             
@@ -76,6 +81,7 @@ class BooksTableSeeder extends Seeder
                 'author' => 'Tim Penyusun Kemenag',
                 'publisher' => 'Kementerian Agama',
                 'publication_year' => 2023,
+                'receipt_date' => '2023-01-20',
                 'description' => 'Buku pelajaran agama Islam',
             ],
         ];

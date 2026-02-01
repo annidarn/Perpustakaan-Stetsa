@@ -26,9 +26,10 @@ class BookCopiesTableSeeder extends Seeder
             for ($i = 1; $i <= $copyCount; $i++) {
                 BookCopy::create([
                     'book_id' => $book->id,
-                    'book_code' => 'LIB-' . str_pad($counter, 3, '0', STR_PAD_LEFT),
-                    'purchase_date' => now()->subDays(rand(30, 365)),
-                    'price' => rand(50000, 150000),
+                    // 'book_code' => 'LIB-' . str_pad($counter, 3, '0', STR_PAD_LEFT),
+                    // 'purchase_date' => now()->subDays(rand(30, 365)),
+                    // 'price' => rand(50000, 150000),
+                    'inventory_number' => $counter,
                     'notes' => $i == 1 ? 'Copy utama' : null,
                     'status' => 'available',
                 ]);
