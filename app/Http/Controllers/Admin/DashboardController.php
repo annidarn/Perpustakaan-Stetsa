@@ -13,6 +13,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        Borrow::updateOverdueStatuses();
+
         $stats = [
             'total_members' => Member::count(),
             'total_books' => Book::count(),

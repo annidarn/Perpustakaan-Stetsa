@@ -160,6 +160,8 @@ class TerminalController extends Controller
      */
     private function validateMemberForBorrow(Member $member)
     {
+        Borrow::updateOverdueStatuses();
+
         // 1. Cek status anggota
         if ($member->status !== 'active') {
             return [
@@ -221,6 +223,8 @@ class TerminalController extends Controller
     }
     public function processReturn(Request $request)
     {
+        Borrow::updateOverdueStatuses();
+
         $request->validate([
             'borrow_code' => 'required|string|exists:borrows,borrow_code'
         ]);

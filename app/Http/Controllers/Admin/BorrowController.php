@@ -18,6 +18,8 @@ class BorrowController extends Controller
      */
     public function index(Request $request)
     {
+        Borrow::updateOverdueStatuses();
+
         $query = Borrow::with(['member.user', 'bookCopy.book']);
         
         // Search

@@ -87,15 +87,49 @@ class Borrow extends Model
      */
     public function calculateFine()
     {
-        if ($this->status !== 'overdue' || $this->fine_paid) {
+        if ($this->status === 'returned') {
+            return $this->fine_amount;
+        }
+
+        if (Carbon::now()->lte($this->due_date)) {
             return 0;
         }
 
-        $daysLate = Carbon::now()->diffInDays($this->due_date);
+        $dueDate = Carbon::parse($this->due_date)->startOfDay();
+        $now = Carbon::now()->startOfDay();
+        
+        $daysLate = $dueDate->diffInDays($now);
         $finePerDay = 1000; // Rp 1.000 per hari
         $totalFine = $daysLate * $finePerDay;
 
         return max(0, $totalFine);
+    }
+
+    /**
+     * Update status peminjaman yang terlambat secara massal
+     */
+    public static function updateOverdueStatuses()
+    {
+        $overdueBorrows = self::where('status', 'borrowed')
+            ->where('due_date', '<', Carbon::now())
+            ->get();
+
+        foreach ($overdueBorrows as $borrow) {
+            $borrow->update([
+                'status' => 'overdue',
+                'fine_amount' => $borrow->calculateFine()
+            ]);
+        }
+
+        $stillOverdue = self::where('status', 'overdue')
+            ->whereNull('return_date')
+            ->get();
+
+        foreach ($stillOverdue as $borrow) {
+            $borrow->update([
+                'fine_amount' => $borrow->calculateFine()
+            ]);
+        }
     }
 
     /**
