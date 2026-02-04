@@ -79,7 +79,8 @@ class MemberController extends Controller
         // 1. Create User account
         $user = User::create([
             'name' => $request->name,
-            'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
+            //'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
+            'email' => '-',
             'password' => Hash::make('password123'),
         ]);
 
