@@ -218,7 +218,7 @@
                                     {{ $return->borrow_code }}
                                 </div>
                                 <div class="text-sm text-gray-600">
-                                    {{ $return->return_date->format('H:i') }}
+                                    {{ $return->return_date ? $return->return_date->format('d/m/Y') : '-' }}
                                 </div>
                             </div>
                             <div class="text-right">

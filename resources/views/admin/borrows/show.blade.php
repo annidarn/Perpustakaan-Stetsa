@@ -83,7 +83,7 @@
                                 @if($borrow->return_date)
                                 <div>
                                     <div class="text-sm text-gray-500">Tanggal Kembali</div>
-                                    <div class="font-medium text-blue-600">{{ $borrow->return_date->format('d F Y') }}</div>
+                                    <div class="font-medium text-blue-600">{{ $borrow->return_date ? $borrow->return_date->format('d F Y') : '-' }}</div>
                                 </div>
                                 @endif
                                 
@@ -369,7 +369,7 @@
                                     </div>
                                     <div>
                                         <div class="font-medium">Buku Dikembalikan</div>
-                                        <div class="text-sm text-gray-500">{{ $borrow->return_date->format('d F Y') }}</div>
+                                        <div class="text-sm text-gray-500">{{ $borrow->return_date ? $borrow->return_date->format('d F Y') : '-' }}</div>
                                     </div>
                                 </div>
                                 @endif
