@@ -250,16 +250,10 @@ class TerminalController extends Controller
                 ->with('error', 'Buku sudah dikembalikan sebelumnya.');
         }
         
-        // Calculate fine if overdue
-        $fineAmount = 0;
-        $isOverdue = false;
-        $daysLate = 0;
-        
-        if (Carbon::now()->gt($borrow->due_date) && $borrow->status !== 'overdue') {
-            $daysLate = Carbon::now()->diffInDays($borrow->due_date);
-            $fineAmount = $daysLate * 1000; // Rp 1.000 per day
-            $isOverdue = true;
-        }
+        // Calculate fine if overdue using model logic
+        $daysLate = $borrow->daysLate();
+        $fineAmount = $borrow->calculateFine();
+        $isOverdue = $daysLate > 0;
         
         // Start transaction
         DB::beginTransaction();
