@@ -149,10 +149,6 @@
                         </div>
                         
                         <div class="mt-3 text-sm text-gray-600">
-                            <div class="flex items-center mb-1">
-                                <i class="fas fa-info-circle mr-2"></i>
-                                Kode dapat ditemukan di struk peminjaman
-                            </div>
                             <div class="flex items-center">
                                 <i class="fas fa-lightbulb mr-2"></i>
                                 Contoh: <span class="font-mono ml-1">PINJ-{{ date('Ymd') }}-001</span>

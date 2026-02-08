@@ -130,13 +130,6 @@ class TerminalController extends Controller
             DB::commit();
 
             // Success message
-            $message = "PEMINJAMAN BERHASIL DIPROSES\n";
-            $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-            $message .= "KODE     : " . $borrow->borrow_code . "\n";
-            $message .= "ANGGOTA  : " . $member->user->name . "\n";
-            $message .= "BUKU     : " . $book->title . "\n";
-            $message .= "COPY     : #" . str_pad($bookCopy->inventory_number, 5, '0', STR_PAD_LEFT) . "\n";
-            $message .= "PINJAM   : " . Carbon::now()->format('d/m/Y') . "\n";
             $message .= "TEMPO    : " . Carbon::now()->addDays(7)->format('d/m/Y') . "\n";
             $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
             $message .= "💡 INFORMASI:\n";
@@ -183,7 +176,7 @@ class TerminalController extends Controller
         if ($activeBorrows >= 5) {
             return [
                 'can_borrow' => false,
-                'message' => 'Anggota sudah meminjam 5 buku (maksimal).'
+                'message' => 'Anggota sudah mencapai maksimal peminjaman.'
             ];
         }
 

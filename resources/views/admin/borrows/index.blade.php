@@ -90,7 +90,20 @@
                                        value="{{ request('date_to') }}"
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
                             </div>
-                            
+
+                            <!-- Order By -->
+                            <div class="mt-4 flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-700 mr-2">Urutkan:</span>
+                                    <select name="order_by" 
+                                            class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                        <option value="borrow_date" {{ request('order_by') == 'borrow_date' ? 'selected' : '' }}>Tanggal Pinjam</option>
+                                        <option value="due_date" {{ request('order_by') == 'due_date' ? 'selected' : '' }}>Jatuh Tempo</option>
+                                        <option value="created_at" {{ request('order_by') == 'created_at' ? 'selected' : '' }}>Tanggal Buat</option>
+                                    </select>
+                                </div>
+                            </div>
+                                                
                             <!-- Action Buttons -->
                             <div class="flex items-end space-x-2">
                                 <button type="submit" 
@@ -101,26 +114,6 @@
                                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     Reset
                                 </a>
-                            </div>
-                        </div>
-                        
-                        <!-- Order By -->
-                        <div class="mt-4 flex items-center space-x-4">
-                            <div class="flex items-center">
-                                <span class="text-sm text-gray-700 mr-2">Urutkan:</span>
-                                <select name="order_by" 
-                                        class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-                                    <option value="borrow_date" {{ request('order_by') == 'borrow_date' ? 'selected' : '' }}>Tanggal Pinjam</option>
-                                    <option value="due_date" {{ request('order_by') == 'due_date' ? 'selected' : '' }}>Jatuh Tempo</option>
-                                    <option value="created_at" {{ request('order_by') == 'created_at' ? 'selected' : '' }}>Tanggal Buat</option>
-                                </select>
-                            </div>
-                            <div class="flex items-center">
-                                <select name="order_dir" 
-                                        class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-                                    <option value="desc" {{ request('order_dir') == 'desc' ? 'selected' : '' }}>↓ Terbaru</option>
-                                    <option value="asc" {{ request('order_dir') == 'asc' ? 'selected' : '' }}>↑ Terlama</option>
-                                </select>
                             </div>
                         </div>
                     </form>
