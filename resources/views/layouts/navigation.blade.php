@@ -16,21 +16,24 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                        {{ __('Kategori Buku') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.*')">
-                        {{ __('Kelas') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
-                        {{ __('Buku') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
-                        {{ __('Anggota') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.borrows.index')" :active="request()->routeIs('admin.borrows.*')">
-                        {{ __('Peminjaman') }}
-                    </x-nav-link>
+                    
+                    @if(Auth::user()->isAdmin())
+                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                            {{ __('Kategori Buku') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.*')">
+                            {{ __('Kelas') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
+                            {{ __('Buku') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
+                            {{ __('Anggota') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.borrows.index')" :active="request()->routeIs('admin.borrows.*')">
+                            {{ __('Peminjaman') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -86,21 +89,24 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                {{ __('Kategori Buku') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.*')">
-                {{ __('Kelas') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
-                {{ __('Buku') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
-                {{ __('Anggota') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin.borrows.index')" :active="request()->routeIs('admin.borrows.*')">
-                {{ __('Peminjaman') }}
-            </x-responsive-nav-link>
+            
+            @if(Auth::user()->isAdmin())
+                <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                    {{ __('Kategori Buku') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.*')">
+                    {{ __('Kelas') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
+                    {{ __('Buku') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
+                    {{ __('Anggota') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.borrows.index')" :active="request()->routeIs('admin.borrows.*')">
+                    {{ __('Peminjaman') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -14,6 +15,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -37,6 +39,11 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->email === 'admin@perpustakaan.test';
+        return $this->email === 'admin@perpustakaan.test' || $this->email === 'admin@perpustakaan.sch.id';
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->isAdmin();
     }
 }

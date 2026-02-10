@@ -14,7 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Search & Filter -->
             <form method="GET" action="{{ route('members.index') }}" class="mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 gap-4">
                     <!-- Search Input -->
                     <div>
                         <label for="search" class="block text-sm font-medium text-gray-700">Cari Anggota</label>
@@ -33,6 +33,20 @@
                             <option value="student" {{ request('type') == 'student' ? 'selected' : '' }}>Siswa</option>
                             <option value="teacher" {{ request('type') == 'teacher' ? 'selected' : '' }}>Guru</option>
                             <option value="staff" {{ request('type') == 'staff' ? 'selected' : '' }}>Staff</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Class Filter -->
+                    <div>
+                        <label for="class_id" class="block text-sm font-medium text-gray-700">Kelas</label>
+                        <select name="class_id" id="class_id" 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                            <option value="">Semua Kelas</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>
+                                    {{ $class->grade }} {{ $class->class_name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     
@@ -62,29 +76,29 @@
                 </div>
             </form>
 
-            <!-- Batch Actions -->
-            <div id="batchActions" class="hidden mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div id="batchActions" class="hidden mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
                 <form id="batchUpdateForm" method="POST" action="{{ route('members.batch.update') }}">
                     @csrf
-                    <input type="hidden" name="member_ids" id="selectedMembers">
+                    <div id="updateMembersContainer"></div>
                     
                     <div class="flex flex-wrap items-center gap-4">
-                        <div class="font-medium text-yellow-800">
+                        <div class="font-bold text-yellow-800">
+                            <i class="fas fa-check-square mr-2"></i>
                             <span id="selectedCount">0</span> anggota dipilih
                         </div>
                         
-                        <div>
-                            <select name="action" id="batchAction" class="rounded-md border-gray-300">
-                                <option value="">Pilih Aksi</option>
+                        <div class="flex items-center space-x-2">
+                            <select name="action" id="batchAction" class="rounded-md border-gray-300 focus:border-yellow-500 focus:ring-yellow-500 text-sm">
+                                <option value="">-- Pilih Aksi --</option>
                                 <option value="status">Ubah Status</option>
                                 <option value="class">Pindah Kelas (Siswa)</option>
-                                <option value="delete">Hapus</option>
+                                <option value="delete">Hapus Masal</option>
                             </select>
                         </div>
                         
                         <!-- Status Field -->
-                        <div id="statusField" class="hidden">
-                            <select name="status" class="rounded-md border-gray-300">
+                        <div id="statusField" class="hidden flex items-center space-x-2">
+                            <select name="status" class="rounded-md border-gray-300 focus:border-yellow-500 focus:ring-yellow-500 text-sm">
                                 <option value="active">Aktif</option>
                                 <option value="inactive">Non-Aktif</option>
                                 <option value="graduated">Lulus</option>
@@ -92,30 +106,30 @@
                         </div>
                         
                         <!-- Class Field -->
-                        <div id="classField" class="hidden">
-                            <select name="class_id" class="rounded-md border-gray-300">
-                                <option value="">Pilih Kelas</option>
+                        <div id="classField" class="hidden flex items-center space-x-2">
+                            <select name="class_id" class="rounded-md border-gray-300 focus:border-yellow-500 focus:ring-yellow-500 text-sm">
+                                <option value="">-- Pilih Kelas Tujuan --</option>
                                 @foreach($classes as $class)
                                     <option value="{{ $class->id }}">{{ $class->grade }} {{ $class->class_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         
-                        <div>
-                            <button type="button" onclick="submitBatchForm()" class="ml-2 text-gray-600 hover:text-gray-800">
+                        <div class="flex items-center space-x-3">
+                            <button type="button" onclick="submitBatchForm()" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-1.5 px-4 rounded text-sm transition-colors shadow-sm">
                                 Terapkan
                             </button>
-                            <button type="button" onclick="clearSelection()" class="ml-2 text-gray-600 hover:text-gray-800">
+                            <button type="button" onclick="clearSelection()" class="text-gray-600 hover:text-gray-800 text-sm font-medium">
                                 Batal
                             </button>
                         </div>
                     </div>
                 </form>
                 
-                <!-- Delete Form (terpisah) -->
+                <!-- Delete Form (terpisah untuk CSRF & Method) -->
                 <form id="batchDeleteForm" method="POST" action="{{ route('members.batch.delete') }}" class="hidden">
                     @csrf
-                    <input type="hidden" name="member_ids" id="deleteMembers">
+                    <div id="deleteMembersContainer"></div>
                 </form>
             </div>
 
@@ -129,6 +143,16 @@
             @if (session('error'))
                 <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                     {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
@@ -268,6 +292,7 @@
         });
         
         function updateMemberSelection(memberId, isChecked) {
+            memberId = String(memberId);
             if (isChecked) {
                 if (!selectedMembers.includes(memberId)) {
                     selectedMembers.push(memberId);
@@ -283,12 +308,8 @@
         function updateBatchUI() {
             const batchDiv = document.getElementById('batchActions');
             const countSpan = document.getElementById('selectedCount');
-            const membersInput = document.getElementById('selectedMembers');
-            const deleteInput = document.getElementById('deleteMembers');
             
             countSpan.textContent = selectedMembers.length;
-            membersInput.value = JSON.stringify(selectedMembers);
-            deleteInput.value = JSON.stringify(selectedMembers);
             
             if (selectedMembers.length > 0) {
                 batchDiv.classList.remove('hidden');
@@ -329,10 +350,31 @@
             
             if (action === 'delete') {
                 if (confirm(`Hapus ${selectedMembers.length} anggota yang dipilih?`)) {
-                    document.getElementById('batchDeleteForm').submit();
+                    const deleteForm = document.getElementById('batchDeleteForm');
+                    const container = document.getElementById('deleteMembersContainer');
+                    container.innerHTML = '';
+                    selectedMembers.forEach(id => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'member_ids[]';
+                        input.value = id;
+                        container.appendChild(input);
+                    });
+                    deleteForm.submit();
                 }
             } else {
-                document.getElementById('batchUpdateForm').submit();
+                const updateForm = document.getElementById('batchUpdateForm');
+                const container = document.getElementById('updateMembersContainer');
+                container.innerHTML = '';
+                
+                selectedMembers.forEach(id => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'member_ids[]';
+                    input.value = id;
+                    container.appendChild(input);
+                });
+                updateForm.submit();
             }
         }
         

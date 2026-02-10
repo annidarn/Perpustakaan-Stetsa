@@ -7,6 +7,7 @@ use App\Models\ClassModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -79,9 +80,9 @@ class MemberController extends Controller
         // 1. Create User account
         $user = User::create([
             'name' => $request->name,
-            //'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
-            'email' => '-',
+            'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
             'password' => Hash::make('password123'),
+            'email_verified_at' => now(), // Memverifikasi otomatis akun member yang dibuat admin
         ]);
 
         // 2. Auto-generate NIS if empty and type is student
@@ -279,8 +280,11 @@ class MemberController extends Controller
             'status' => 'required|in:active,inactive,graduated',
         ]);
 
-        // Update User name
-        $member->user->update(['name' => $request->name]);
+        // Update User name and Email Verification Status
+        $member->user->update([
+            'name' => $request->name,
+            'email_verified_at' => $request->has('email_verified') ? ($member->user->email_verified_at ?? now()) : null,
+        ]);
 
         // === PERBAIKAN: Handle NIS/NIP based on type ===
         $nis = $request->nis;
@@ -332,8 +336,8 @@ class MemberController extends Controller
             'member_ids' => 'required|array',
             'member_ids.*' => 'exists:members,id',
             'action' => 'required|in:status,class',
-            'status' => 'required_if:action,status|in:active,inactive,graduated',
-            'class_id' => 'required_if:action,class|exists:classes,id'
+            'status' => 'required_if:action,status|nullable|in:active,inactive,graduated',
+            'class_id' => 'required_if:action,class|nullable|exists:classes,id'
         ]);
         
         $memberIds = $request->member_ids;

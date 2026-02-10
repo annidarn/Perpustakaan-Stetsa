@@ -35,6 +35,19 @@
                             @enderror
                         </div>
 
+                        <!-- Email Status -->
+                        <div class="mb-6">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="email_verified" value="1" 
+                                       {{ $member->user->email_verified_at ? 'checked' : '' }}
+                                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <span class="ml-2 text-sm font-medium text-gray-700">Email Utama Terverifikasi</span>
+                            </label>
+                            <p class="text-xs text-gray-500 mt-1 ml-6">
+                                Centang ini jika Anda ingin mengaktifkan akun member tanpa perlu verifikasi email manual.
+                            </p>
+                        </div>
+
                         <!-- Jenis Anggota (readonly) -->
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">

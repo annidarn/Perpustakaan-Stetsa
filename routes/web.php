@@ -15,10 +15,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'admin'])
+    ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -26,7 +26,8 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::middleware(['auth'])->group(function () {
+// Admin Only Routes
+Route::middleware(['auth', 'admin', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('classes', ClassController::class);
     Route::resource('books', BookController::class);
@@ -35,9 +36,17 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/members/{member}/update-status', [MemberController::class, 'updateStatus'])->name('members.update.status');
     Route::post('/members/batch-update', [MemberController::class, 'batchUpdate'])->name('members.batch.update');
     Route::post('/members/batch-delete', [MemberController::class, 'batchDelete'])->name('members.batch.delete');
+
+    // Admin Borrows
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('borrows', AdminBorrowController::class);
+        Route::post('/borrows/{borrow}/extend', [AdminBorrowController::class, 'extend'])->name('borrows.extend');
+        Route::post('/borrows/{borrow}/mark-paid', [AdminBorrowController::class, 'markPaid'])->name('borrows.mark-paid');
+    });
 });
 
-// Public Terminal Routes (di luar middleware auth)
+// Public/Member Terminal Routes
 Route::prefix('terminal')->name('terminal.')->group(function () {
     Route::get('/', [TerminalController::class, 'index'])->name('index');
     Route::get('/search', [TerminalController::class, 'search'])->name('search');
@@ -47,17 +56,5 @@ Route::prefix('terminal')->name('terminal.')->group(function () {
     Route::get('/borrow/{borrow}/receipt', [TerminalController::class, 'showReceipt'])->name('borrow.receipt');
     Route::get('/return', [TerminalController::class, 'showReturnForm'])->name('return.form');
     Route::post('/return', [TerminalController::class, 'processReturn'])->name('return.process');
-});
-
-// Admin Borrows
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('borrows', AdminBorrowController::class);
-    Route::post('/borrows/{borrow}/extend', [AdminBorrowController::class, 'extend'])->name('borrows.extend');
-    Route::post('/borrows/{borrow}/mark-paid', [AdminBorrowController::class, 'markPaid'])->name('borrows.mark-paid');
-});
-
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
-        ->name('admin.dashboard');
 });
 
