@@ -13,16 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class BorrowController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         Borrow::updateOverdueStatuses();
 
         $query = Borrow::with(['member.user', 'bookCopy.book']);
         
-        // Search
+        // pencarian
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -36,12 +33,12 @@ class BorrowController extends Controller
             });
         }
         
-        // Filter by status
+        // filter berdasarkan status
         if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
         
-        // Filter by date range
+        // filter berdasarkan rentang tanggal
         if ($request->has('date_from') && $request->date_from != '') {
             $query->whereDate('borrow_date', '>=', $request->date_from);
         }
@@ -50,7 +47,7 @@ class BorrowController extends Controller
             $query->whereDate('borrow_date', '<=', $request->date_to);
         }
         
-        // Order by
+        // urutkan berdasarkan ...
         $orderBy = $request->get('order_by', 'borrow_date');
         $orderDir = $request->get('order_dir', 'desc');
         $query->orderBy($orderBy, $orderDir);
@@ -60,9 +57,6 @@ class BorrowController extends Controller
         return view('admin.borrows.index', compact('borrows'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $members = Member::where('status', 'active')
@@ -78,9 +72,6 @@ class BorrowController extends Controller
         return view('admin.borrows.create', compact('members', 'books'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -91,7 +82,7 @@ class BorrowController extends Controller
             'notes' => 'nullable|string',
         ]);
         
-        // Check member can borrow
+        // check member apakah bisa pinjam
         $member = Member::findOrFail($request->member_id);
         $activeBorrows = $member->borrows()->whereIn('status', ['borrowed', 'overdue'])->count();
         
@@ -99,7 +90,7 @@ class BorrowController extends Controller
             return back()->with('error', 'Anggota sudah meminjam 5 buku (maksimal).');
         }
         
-        // Check book copy availability
+        // cek ketersediaan copy buku
         $bookCopy = BookCopy::findOrFail($request->book_copy_id);
         if ($bookCopy->status !== 'available') {
             return back()->with('error', 'Copy buku tidak tersedia.');
@@ -131,27 +122,20 @@ class BorrowController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Borrow $borrow)
     {
         $borrow->load(['member.user', 'bookCopy.book', 'member.class']);
         return view('admin.borrows.show', compact('borrow'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // form edit
     public function edit(Borrow $borrow)
     {
         $borrow->load(['member.user', 'bookCopy.book']);
         return view('admin.borrows.edit', compact('borrow'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // update
     public function update(Request $request, Borrow $borrow)
     {
         $request->validate([
@@ -171,7 +155,7 @@ class BorrowController extends Controller
         DB::beginTransaction();
         
         try {
-            // Update borrow
+            // update pinjam
             $borrow->update([
                 'borrow_date' => $request->borrow_date,
                 'due_date' => $request->due_date,
@@ -183,7 +167,7 @@ class BorrowController extends Controller
                 'notes' => $request->notes,
             ]);
             
-            // Update book copy status if status changed
+            // update status copy buku jika status berubah
             if ($oldStatus !== $newStatus) {
                 if ($newStatus === 'returned') {
                     $borrow->bookCopy->update(['status' => 'available']);
@@ -203,12 +187,10 @@ class BorrowController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // hapus data
     public function destroy(Borrow $borrow)
     {
-        // Only allow deletion of returned borrows
+        // hanya membolehkan hapus jika buku sudah dikembalikan
         if ($borrow->status !== 'returned') {
             return back()->with('error', 'Hanya peminjaman yang sudah dikembalikan yang dapat dihapus.');
         }
@@ -216,10 +198,10 @@ class BorrowController extends Controller
         DB::beginTransaction();
         
         try {
-            // Update book copy back to available
+            // update copy buku kembali ke available
             $borrow->bookCopy->update(['status' => 'available']);
             
-            // Delete borrow
+            // hapus pinjam
             $borrow->delete();
             
             DB::commit();
@@ -233,9 +215,7 @@ class BorrowController extends Controller
         }
     }
 
-    /**
-     * Extend borrow period
-     */
+    // memperpanjang masa peminjaman
     public function extend(Borrow $borrow)
     {
         if (!$borrow->canBeExtended()) {
@@ -250,9 +230,7 @@ class BorrowController extends Controller
         return back()->with('success', 'Peminjaman berhasil diperpanjang 7 hari.');
     }
 
-    /**
-     * Mark fine as paid
-     */
+    // menandai sudah lunas
     public function markPaid(Borrow $borrow)
     {
         $borrow->update(['fine_paid' => true]);

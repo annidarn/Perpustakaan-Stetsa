@@ -9,14 +9,12 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // menampilkan daftar data
     public function index(Request $request)
     {
         $query = Book::with('category');
         
-        // Search
+        // pencarian
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -26,7 +24,7 @@ class BookController extends Controller
             });
         }
         
-        // Filter by category
+        // filter berdasarkan kategori
         if ($request->has('category_id') && $request->category_id != '') {
             $query->where('category_id', $request->category_id);
         }
@@ -37,18 +35,14 @@ class BookController extends Controller
         return view('books.index', compact('books', 'categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // menampilkan formulir untuk membuat data baru
     public function create()
     {
         $categories = Category::orderBy('name')->get();
         return view('books.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // simpan data yang baru dibuat di penyimpanan
     public function store(Request $request)
     {
         $request->validate([
@@ -63,7 +57,7 @@ class BookController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        // 1. Buat buku
+        // 1. buat buku
         $book = Book::create([
             'isbn' => $request->isbn,
             'title' => $request->title,
@@ -75,34 +69,28 @@ class BookController extends Controller
             'description' => $request->description,
         ]);
 
-        // 2. Buat copies berdasarkan quantity
+        // 2. buat copy berdasarkan quantity
         $book->createCopies($request->quantity);
 
         return redirect()->route('books.index')
             ->with('success', "Buku '{$book->title}' berhasil ditambahkan dengan {$request->quantity} copy.");
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // menampilkan data yang ditentukan
     public function show(Book $book)
     {
         $book->load(['category', 'copies']);
         return view('books.show', compact('book'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // menampilkan formulir untuk mengedit data yang ditentukan
     public function edit(Book $book)
     {
         $categories = Category::orderBy('name')->get();
         return view('books.edit', compact('book', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // memperbarui data yang ditentukan dalam penyimpanan
     public function update(Request $request, Book $book)
     {
         $request->validate([
@@ -122,9 +110,7 @@ class BookController extends Controller
             ->with('success', 'Buku berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // hapus data yang ditentukan dari penyimpanan
     public function destroy(Book $book)
     {
         $bookTitle = $book->title;
@@ -142,9 +128,7 @@ class BookController extends Controller
             ->with('success', $message);
     }
     
-    /**
-     * Hapus single copy
-     */
+    // hapus satu salinan
     public function deleteCopy(Book $book, BookCopy $copy)
     {
         if ($copy->status === 'borrowed') {

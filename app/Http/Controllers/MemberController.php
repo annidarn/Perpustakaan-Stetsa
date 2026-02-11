@@ -11,14 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // menampilkan data
     public function index(Request $request)
     {
         $query = Member::with(['user', 'class']);
         
-        // Search
+        // pencarian
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -30,17 +28,17 @@ class MemberController extends Controller
             });
         }
         
-        // Filter by type
+        // filter berdasarkan tipe
         if ($request->has('type') && $request->type != '') {
             $query->where('type', $request->type);
         }
         
-        // Filter by status
+        // filter berdasarkan status
         if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
         
-        // Filter by class (for students only)
+        // filter berdasarkan kelas
         if ($request->has('class_id') && $request->class_id != '') {
             $query->where('class_id', $request->class_id);
         }
@@ -51,18 +49,14 @@ class MemberController extends Controller
         return view('members.index', compact('members', 'classes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // manampilkan formulir untuk membuat data baru
     public function create()
     {
         $classes = ClassModel::orderBy('grade')->orderBy('class_name')->get();
         return view('members.create', compact('classes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // simpan data yang baru dibuat di penyimpanan
     public function store(Request $request)
     {
         $request->validate([
@@ -77,48 +71,48 @@ class MemberController extends Controller
             'status' => 'required|in:active,inactive,graduated',
         ]);
 
-        // 1. Create User account
+        // 1. membuat user baru
         $user = User::create([
             'name' => $request->name,
             'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
             'password' => Hash::make('password123'),
-            'email_verified_at' => now(), // Memverifikasi otomatis akun member yang dibuat admin
+            'email_verified_at' => now(), // memverifikasi otomatis akun member yang dibuat admin
         ]);
 
-        // 2. Auto-generate NIS if empty and type is student
+        // 2. NIS akan dibuat secara otomatis jika kosong dan tipenya adalah siswa
         $nis = $request->nis;
         if (empty($nis) && $request->type === 'student') {
             $nis = $this->generateNIS();
         }
         
-        // PERBAIKAN: Reset NIS jika bukan student
+        // reset NIS jika bukan student
         if ($request->type !== 'student') {
             $nis = null;
         }
 
-        // 3. Auto-generate NIP if empty and type is teacher/staff
+        // 3. auto-generate NIP jika kosong dan tipe nya guru/staff
         $nip = $request->nip;
         if (empty($nip) && in_array($request->type, ['teacher', 'staff'])) {
             $nip = $this->generateNIP($request->type);
         }
         
-        // PERBAIKAN: Reset NIP jika student
+        // reset NIP jika student
         if ($request->type === 'student') {
             $nip = null;
         }
 
-        // 4. Auto-set enrollment year for new students
+        // 4. menetapkan tahun pendaftaran secara otomatis untuk siswa baru
         $enrollmentYear = $request->enrollment_year;
         if (empty($enrollmentYear) && $request->type === 'student') {
             $enrollmentYear = date('Y');
         }
         
-        // PERBAIKAN: Reset enrollment year jika bukan student
+        // reset enrollment year jika bukan student
         if ($request->type !== 'student') {
             $enrollmentYear = null;
         }
 
-        // 5. Create Member
+        // 5. buat member
         $member = Member::create([
             'user_id' => $user->id,
             'nis' => $nis,
@@ -135,24 +129,20 @@ class MemberController extends Controller
             ->with('success', "Anggota {$request->name} berhasil ditambahkan.");
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // menampilkan data yang ditentukan
     public function show(Member $member)
     {
         $member->load(['user', 'class', 'borrows.bookCopy.book']);
         return view('members.show', compact('member'));
     }
 
-    /**
-     * Show promote form (naik kelas massal)
-     */
+    // menampilkan formulir promosi (naik kelas massal)
     public function showPromoteForm()
     {
-        // Get all classes
+        // semua kelas
         $classes = ClassModel::orderBy('grade')->orderBy('class_name')->get();
         
-        // Get promotion statistics
+        // statistik promosi
         $stats = [
             'grade_10' => Member::whereHas('class', function($q) {
                 $q->where('grade', '10');
@@ -170,9 +160,7 @@ class MemberController extends Controller
         return view('members.promote', compact('classes', 'stats'));
     }
 
-    /**
-     * Process mass promotion
-     */
+    // proses promosi massal
     public function processPromotion(Request $request)
     {
         if ($request->has('preview_only')) {
@@ -205,12 +193,12 @@ class MemberController extends Controller
                 'errors' => []
             ];
             
-            // Create backup if requested
+            // buat cadangan jika diminta
             if ($createBackup) {
                 $this->createPromotionBackup();
             }
             
-            // Process each class mapping
+            // memproses setiap pemetaan kelas
             foreach ($promoteMap as $oldClassId => $newTarget) {
                 if (empty($newTarget)) {
                     $results['skipped']++;
@@ -218,11 +206,11 @@ class MemberController extends Controller
                 }
                 
                 if ($newTarget === 'graduated') {
-                    // Graduate all students in this class
+                    // semua siswa di kelas ini lulus
                     $count = $this->graduateClass($oldClassId, $notifyStudents);
                     $results['graduated'] += $count;
                 } else {
-                    // Promote to new class
+                    // promosikan ke kelas baru
                     $count = $this->promoteClass($oldClassId, $newTarget, $updateEnrollmentYear, $notifyStudents);
                     $results['promoted'] += $count;
                 }
@@ -230,7 +218,7 @@ class MemberController extends Controller
             
             DB::commit();
             
-            // Success message with summary
+            // pesan sukses dengan ringkasan
             $message = "Naik kelas berhasil diproses!<br>";
             $message .= "• {$results['promoted']} siswa naik kelas<br>";
             $message .= "• {$results['graduated']} siswa lulus<br>";
@@ -253,9 +241,7 @@ class MemberController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // menampilkan formulir untuk mengedit data yang ditentukan
     public function edit(Member $member)
     {
         $classes = ClassModel::orderBy('grade')->orderBy('class_name')->get();
@@ -263,9 +249,7 @@ class MemberController extends Controller
         return view('members.edit', compact('member', 'classes'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // memperbarui data yang ditentukan dalam penyimpanan
     public function update(Request $request, Member $member)
     {
         $request->validate([
@@ -280,26 +264,26 @@ class MemberController extends Controller
             'status' => 'required|in:active,inactive,graduated',
         ]);
 
-        // Update User name and Email Verification Status
+        // memperbarui nama pengguna dan status verifikasi email
         $member->user->update([
             'name' => $request->name,
             'email_verified_at' => $request->has('email_verified') ? ($member->user->email_verified_at ?? now()) : null,
         ]);
 
-        // === PERBAIKAN: Handle NIS/NIP based on type ===
+        // menangani NIS/NIP berdasarkan tipenya
         $nis = $request->nis;
         $nip = $request->nip;
         
-        // Reset yang tidak sesuai type
+        // reset yang tidak sesuai tipe
         if ($request->type !== 'student') {
             $nis = null; // Non-student tidak perlu NIS
         }
         
         if ($request->type === 'student') {
-            $nip = null; // Student tidak perlu NIP
+            $nip = null; // student tidak perlu NIP
         }
 
-        // Update Member
+        // update member
         $member->update([
             'nis' => $nis,
             'nip' => $nip,
@@ -329,7 +313,7 @@ class MemberController extends Controller
                 ($request->status === 'inactive' ? 'Non-Aktif' : 'Lulus')));
     }
 
-    // Di MemberController.php
+    // update batch/bersamaan
     public function batchUpdate(Request $request)
     {
         $request->validate([
@@ -351,7 +335,7 @@ class MemberController extends Controller
                 $message = "Status {$request->status} berhasil diterapkan ke " . count($memberIds) . " anggota.";
             } 
             elseif ($request->action === 'class') {
-                // Hanya untuk siswa
+                // hanya untuk siswa
                 Member::whereIn('id', $memberIds)
                     ->where('type', 'student')
                     ->update(['class_id' => $request->class_id]);
@@ -380,7 +364,7 @@ class MemberController extends Controller
             ->with('borrows')
             ->get();
         
-        // Cek apakah ada yang masih punya peminjaman aktif
+        // cek apakah ada yang masih punya peminjaman aktif
         $hasActiveBorrows = $members->contains(function($member) {
             return $member->borrows()->whereNull('return_date')->exists();
         });
@@ -407,21 +391,20 @@ class MemberController extends Controller
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-    /**
-     * Remove the specified resource from storage.
-     */
+    
+    // hapus data yang ditentukan dari penyimpanan
     public function destroy(Member $member)
     {
-        // Cek apakah anggota masih punya peminjaman aktif
+        // cek apakah anggota masih punya peminjaman aktif
         if ($member->borrows()->whereNull('return_date')->exists()) {
             return redirect()->route('members.index')
                 ->with('error', 'Tidak dapat menghapus anggota yang masih memiliki peminjaman aktif.');
         }
 
-        // Hapus user (optional, bisa juga di-keep)
+        // hapus user (optional, bisa juga di-keep)
         $member->user->delete();
         
-        // Hapus member
+        // hapus member
         $member->delete();
 
         return redirect()->route('members.index')

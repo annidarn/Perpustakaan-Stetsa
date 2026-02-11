@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class ClassController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // menampilkan data
     public function index()
     {
         $classes = ClassModel::orderBy('grade')
@@ -18,17 +16,13 @@ class ClassController extends Controller
         return view('classes.index', compact('classes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // manampilkan formulir untuk membuat data baru
     public function create()
     {
         return view('classes.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // simpan data yang baru dibuat di penyimpanan
     public function store(Request $request)
     {
         $request->validate([
@@ -43,25 +37,19 @@ class ClassController extends Controller
             ->with('success', 'Kelas berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // menampilkan data yang ditentukan
     public function show(ClassModel $class)
     {
         return view('classes.show', compact('class'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // menampilkan formulir untuk mengedit data yang ditentukan
     public function edit(ClassModel $class)
     {
         return view('classes.edit', compact('class'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // memperbarui data yang ditentukan dalam penyimpanan
     public function update(Request $request, ClassModel $class)
     {
         $request->validate([
@@ -76,12 +64,10 @@ class ClassController extends Controller
             ->with('success', 'Kelas berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // hapus data yang ditentukan dari penyimpanan
     public function destroy(ClassModel $class)
     {
-        // Cek apakah kelas punya anggota
+        // cek apakah kelas punya anggota
         if ($class->members()->count() > 0) {
             return redirect()->route('classes.index')
                 ->with('error', 'Tidak dapat menghapus kelas karena masih memiliki anggota.');

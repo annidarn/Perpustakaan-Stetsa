@@ -10,16 +10,14 @@ use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
 {
-    /**
-     * Display the password reset link request view.
-     */
+    // menampilkan tampilan permintaan tautan pengaturan ulang kata sandi
     public function create(): View
     {
         return view('auth.forgot-password');
     }
 
     /**
-     * Handle an incoming password reset link request.
+     * tangani permintaan tautan pengaturan ulang kata sandi yang masuk
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -29,9 +27,9 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
+        // kami akan mengirimkan tautan pengaturan ulang kata sandi kepada pengguna ini. setelah kami mencoba
+        // mengirimkan tautan tersebut, kami akan memeriksa responsnya lalu melihat pesan yang perlu kami
+        // tampilkan kepada pengguna. terakhir, kami akan mengirimkan respons yang tepat..
         $status = Password::sendResetLink(
             $request->only('email')
         );
