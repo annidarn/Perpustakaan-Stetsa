@@ -176,7 +176,7 @@
                                 <td class="px-6 py-4">{{ $borrow->due_date->format('d/m/Y') }}</td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        {{ now()->diffInDays($borrow->due_date) }} hari
+                                        {{ max(0, now()->startOfDay()->diffInDays($borrow->due_date)) }} hari
                                     </span>
                                 </td>
                             </tr>
