@@ -12,17 +12,13 @@ use Carbon\Carbon;
 
 class TerminalController extends Controller
 {
-    /**
-     * Display the main terminal page
-     */
+    // menampilkan halaman terminal utama
     public function index()
     {
         return view('terminal.index');
     }
 
-    /**
-     * Search books for borrowing
-     */
+    // pencarian buku untuk peminjaman
     public function search(Request $request)
     {
         $request->validate([
@@ -51,12 +47,10 @@ class TerminalController extends Controller
         return view('terminal.search-results', compact('books'));
     }
 
-    /**
-     * Show borrow form after member validation
-     */
+    // menampilkan formulir peminjaman setelah validasi anggota
     public function showBorrowForm(Member $member, Book $book)
     {
-        // Validasi: cek apakah member bisa meminjam
+        // validasi: cek apakah member bisa meminjam
         $validation = $this->validateMemberForBorrow($member);
         
         if (!$validation['can_borrow'] && !session('success')) {
@@ -64,7 +58,7 @@ class TerminalController extends Controller
                 ->with('error', $validation['message']);
         }
 
-        // Get available copies of this book
+        // mendapatkan copy buku ini yang tersedia
         $availableCopies = BookCopy::where('book_id', $book->id)
             ->where('status', 'available')
             ->get();
@@ -77,9 +71,7 @@ class TerminalController extends Controller
         return view('terminal.borrow-form', compact('member', 'book', 'availableCopies'));
     }
 
-    /**
-     * Process book borrowing
-     */
+    // proses peminjaman buku
     public function processBorrow(Request $request, Member $member)
     {
         $request->validate([
@@ -88,24 +80,24 @@ class TerminalController extends Controller
             'terms' => 'required|accepted'
         ]);
 
-        // Double-check member validation
+        // periksa kembali validasi anggota
         $validation = $this->validateMemberForBorrow($member);
         if (!$validation['can_borrow']) {
             return redirect()->route('terminal.index')
                 ->with('error', $validation['message']);
         }
 
-        // Get book and copy === PERBAIKAN: DAPATKAN $book DARI $request ===
-        $book = Book::findOrFail($request->book_id); // ← TAMBAHKAN INI
+        // mendapatkan buku dan copy buku
+        $book = Book::findOrFail($request->book_id);
         $bookCopy = BookCopy::findOrFail($request->book_copy_id);
 
-        // Verify copy is available
+        // verifikasi copy buku tersedia
         if ($bookCopy->status !== 'available') {
             return redirect()->route('terminal.borrow.form', ['member' => $member, 'book' => $book->id])
                 ->with('error', 'Copy buku tidak tersedia untuk dipinjam.');
         }
 
-        // Verify copy belongs to the book
+        // verifikasi salinan tersebut milik buku tersebut
         if ($bookCopy->book_id != $book->id) {
             return redirect()->route('terminal.borrow.form', ['member' => $member, 'book' => $book->id])
                 ->with('error', 'Copy tidak sesuai dengan buku.');
@@ -114,7 +106,7 @@ class TerminalController extends Controller
         DB::beginTransaction();
         
         try {
-            // Create borrow record
+            // buat catatan peminjaman
             $borrow = Borrow::create([
                 'borrow_code' => Borrow::generateBorrowCode(),
                 'member_id' => $member->id,
@@ -124,12 +116,12 @@ class TerminalController extends Controller
                 'status' => 'borrowed',
             ]);
 
-            // Update book copy status
+            // update status salinan buku
             $bookCopy->update(['status' => 'borrowed']);
 
             DB::commit();
 
-            // Success message
+            // pesan berhasil
             $message .= "TEMPO    : " . Carbon::now()->addDays(7)->format('d/m/Y') . "\n";
             $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
             $message .= "💡 INFORMASI:\n";
@@ -152,14 +144,12 @@ class TerminalController extends Controller
         }
     }
 
-    /**
-     * Validate member for borrowing
-     */
+    // verifikasi keanggotaan untuk peminjaman
     private function validateMemberForBorrow(Member $member)
     {
         Borrow::updateOverdueStatuses();
 
-        // 1. Cek status anggota
+        // 1. cek status anggota
         if ($member->status !== 'active') {
             return [
                 'can_borrow' => false,
@@ -168,7 +158,7 @@ class TerminalController extends Controller
             ];
         }
 
-        // 2. Cek jumlah buku sedang dipinjam
+        // 2. cek jumlah buku sedang dipinjam
         $activeBorrows = $member->borrows()
             ->whereIn('status', ['borrowed', 'overdue'])
             ->count();
@@ -180,7 +170,7 @@ class TerminalController extends Controller
             ];
         }
 
-        // 3. Cek denda belum dibayar (Include returned but unpaid)
+        // 3. cek denda belum dibayar
         $unpaidFines = $member->borrows()
             ->where(function($q) {
                 $q->where('fine_paid', false)->orWhereNull('fine_paid');
@@ -202,9 +192,7 @@ class TerminalController extends Controller
         ];
     }
 
-    /**
-     * Show borrowing receipt
-     */
+    // menunjukkan tanda terima peminjaman
     public function showReceipt(Borrow $borrow)
     {
         $borrow->load(['member.user', 'bookCopy.book']);
@@ -212,9 +200,7 @@ class TerminalController extends Controller
         return view('terminal.borrow-receipt', compact('borrow'));
     }
 
-    /**
-     * Process book return
-     */
+    // proses pengembalian buku
     public function showReturnForm()
     {
         return view('terminal.return-form');
@@ -227,7 +213,7 @@ class TerminalController extends Controller
             'borrow_code' => 'required|string|exists:borrows,borrow_code'
         ]);
         
-        // Find borrow record
+        // temukan catatan peminjaman
         $borrow = Borrow::where('borrow_code', $request->borrow_code)
             ->with(['member.user', 'bookCopy.book'])
             ->first();
@@ -237,22 +223,22 @@ class TerminalController extends Controller
                 ->with('error', 'Kode peminjaman tidak ditemukan.');
         }
         
-        // Check if already returned
+        // periksa apakah sudah dikembalikan
         if ($borrow->status === 'returned') {
             return redirect()->route('terminal.return.form')
                 ->with('error', 'Buku sudah dikembalikan sebelumnya.');
         }
         
-        // Calculate fine if overdue using model logic
+        // hitung denda jika terlambat membayar
         $daysLate = $borrow->daysLate();
         $fineAmount = $borrow->calculateFine();
         $isOverdue = $daysLate > 0;
         
-        // Start transaction
+        // mulai transaksi
         DB::beginTransaction();
         
         try {
-            // Update borrow record
+            // update catatan peminjaman
             $borrow->update([
                 'return_date' => Carbon::now(),
                 'status' => 'returned',
@@ -260,7 +246,7 @@ class TerminalController extends Controller
                 'fine_paid' => $fineAmount > 0 ? false : true,
             ]);
             
-            // Update book copy status
+            // update status copy buku
             $borrow->bookCopy->update(['status' => 'available']);
             
             DB::commit();
@@ -290,9 +276,7 @@ class TerminalController extends Controller
         }
     }
 
-    /**
-     * Validate member identifier (NIS/NIP)
-     */
+    // validasi pengidentifikasi anggota
     public function validateMember(Request $request)
     {
         $request->validate([
@@ -300,7 +284,7 @@ class TerminalController extends Controller
             'book_id' => 'required|exists:books,id'
         ]);
         
-        // Cari member berdasarkan NIS atau NIP (trim for reliability)
+        // Cari member berdasarkan NIS atau NIP
         $identifier = trim($request->member_identifier);
         $member = Member::where('nis', $identifier)
             ->orWhere('nip', $identifier)
@@ -312,7 +296,7 @@ class TerminalController extends Controller
                 ->withInput();
         }
         
-        // Validasi apakah bisa meminjam
+        // validasi apakah bisa meminjam
         $validation = $this->validateMemberForBorrow($member);
         
         if (!$validation['can_borrow']) {
@@ -321,7 +305,7 @@ class TerminalController extends Controller
                 ->withInput();
         }
         
-        // Redirect ke borrow form
+        // redirect ke borrow form
         return redirect()->route('terminal.borrow.form', [
             'member' => $member,
             'book' => $request->book_id

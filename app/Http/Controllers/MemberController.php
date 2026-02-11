@@ -411,9 +411,7 @@ class MemberController extends Controller
             ->with('success', 'Anggota berhasil dihapus.');
     }
 
-    /**
-     * Generate email for user account
-     */
+    // buat email untuk akun pengguna
     private function generateEmail($nis, $nip, $type)
     {
         $prefix = '';
@@ -429,9 +427,7 @@ class MemberController extends Controller
         return $prefix . '@perpustakaan.sch.id';
     }
 
-    /**
-     * Generate NIS if not provided
-     */
+    // buat NIS jika belum tersedia
     private function generateNIS()
     {
         $lastMember = Member::whereNotNull('nis')
@@ -443,12 +439,10 @@ class MemberController extends Controller
             return str_pad((int)$lastMember->nis + 1, 5, '0', STR_PAD_LEFT);
         }
         
-        return '10001'; // Start from 10001
+        return '10001'; // dimulai dari 10001
     }
 
-    /**
-     * Generate NIP if not provided
-     */
+    // buat NIP jika belum tersedia
     private function generateNIP($type)
     {
         $prefix = $type === 'teacher' ? 'T' : 'S';
@@ -465,9 +459,7 @@ class MemberController extends Controller
         return $prefix . '0001';
     }
 
-    /**
-     * Graduate all active students in a class
-     */
+    // luluskan seluruh mahasiswa aktif di kelas tersebut
     private function graduateClass($classId, $addNote = false)
     {
         $students = Member::where('class_id', $classId)
@@ -492,9 +484,7 @@ class MemberController extends Controller
         return $students->count();
     }
 
-    /**
-     * Promote students from old class to new class
-     */
+    // promosikan siswa dari kelas lama ke kelas baru
     private function promoteClass($oldClassId, $newClassId, $updateEnrollmentYear = false, $addNote = false)
     {
         $students = Member::where('class_id', $oldClassId)
@@ -505,12 +495,12 @@ class MemberController extends Controller
         foreach ($students as $student) {
             $updates = ['class_id' => $newClassId];
             
-            // Update enrollment year if requested
+            // perbarui tahun pendaftaran jika diminta
             if ($updateEnrollmentYear) {
                 $updates['enrollment_year'] = $student->enrollment_year + 1;
             }
             
-            // Add note if requested
+            // tambahkan catatan jika diminta
             if ($addNote) {
                 $currentNotes = $student->notes ? $student->notes . "\n" : '';
                 $oldClass = ClassModel::find($oldClassId);
@@ -526,16 +516,14 @@ class MemberController extends Controller
         return $students->count();
     }
 
-    /**
-     * Create backup of current student data
-     */
+    // buat cadangan data siswa saat ini
     private function createPromotionBackup()
     {
         try {
-            // Create backup table if not exists
+            // buat tabel cadangan jika belum ada
             DB::statement("CREATE TABLE IF NOT EXISTS members_backup LIKE members");
             
-            // Insert backup data with timestamp
+            // sisipkan data cadangan dengan timestamp
             $backupData = Member::where('type', 'student')
                 ->get()
                 ->map(function($member) {
@@ -565,7 +553,7 @@ class MemberController extends Controller
             return true;
             
         } catch (\Exception $e) {
-            // Log error but don't stop the process
+            // catat kesalahan dalam log, tetapi jangan hentikan prosesnya
             \Log::error('Backup creation failed: ' . $e->getMessage());
             return false;
         }
