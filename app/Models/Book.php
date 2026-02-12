@@ -20,31 +20,31 @@ class Book extends Model
         'description',
     ];
 
-    // Cast tanggal
+    // cast tanggal
     protected $casts = [
         'receipt_date' => 'date',
     ];
 
-    // Relasi ke category
+    // relasi ke category
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    // Relasi ke book_copies
+    // relasi ke book_copies
     public function copies()
     {
         return $this->hasMany(BookCopy::class);
     }
 
-    // Helper: Generate inventory number berikutnya
+    // generate inventory number berikutnya
     public static function getNextInventoryNumber()
     {
         $lastCopy = BookCopy::orderBy('inventory_number', 'desc')->first();
         return $lastCopy ? $lastCopy->inventory_number + 1 : 1;
     }
 
-    // Helper: Buat copies berdasarkan qty
+    // buat copies berdasarkan qty
     public function createCopies($quantity, $condition = 'good')
     {
         $nextNumber = self::getNextInventoryNumber();
@@ -62,13 +62,13 @@ class Book extends Model
         return $quantity;
     }
 
-    // Helper: Jumlah copy tersedia
+    // jumlah copy tersedia
     public function availableCopiesCount()
     {
         return $this->copies()->where('status', 'available')->count();
     }
 
-    // Helper: Total semua copy
+    // total semua copy
     public function totalCopiesCount()
     {
         return $this->copies()->count();

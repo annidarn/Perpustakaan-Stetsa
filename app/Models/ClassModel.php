@@ -9,10 +9,10 @@ class ClassModel extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel (karena nama model beda dengan tabel)
+    // tentukan nama tabel (karena nama model beda dengan tabel)
     protected $table = 'classes';
     
-    // Kolom yang bisa diisi massal
+    // kolom yang bisa diisi massal
     protected $fillable = [
         'class_name',
         'grade',
@@ -20,7 +20,7 @@ class ClassModel extends Model
         'academic_year'
     ];
 
-    // Relasi ke members (satu kelas punya banyak anggota)
+    // relasi ke members (satu kelas punya banyak anggota)
     public function members()
     {
         return $this->hasMany(Member::class, 'class_id');

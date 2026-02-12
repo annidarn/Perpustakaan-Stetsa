@@ -31,7 +31,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    // TAMBAHKAN INI ↓
     public function member()
     {
         return $this->hasOne(Member::class);

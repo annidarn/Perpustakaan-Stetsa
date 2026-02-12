@@ -32,49 +32,37 @@ class Borrow extends Model
         'fine_paid' => 'boolean',
     ];  
 
-    /**
-     * Relasi ke Member
-     */
+    // relasi ke Member
     public function member()
     {
         return $this->belongsTo(Member::class);
     }
 
-    /**
-     * Relasi ke BookCopy
-     */
+    // relasi ke BookCopy
     public function bookCopy()
     {
         return $this->belongsTo(BookCopy::class);
     }
 
-    /**
-     * Scope untuk peminjaman aktif
-     */
+    // scope untuk peminjaman aktif
     public function scopeActive($query)
     {
         return $query->whereIn('status', ['borrowed', 'overdue']);
     }
 
-    /**
-     * Scope untuk peminjaman yang sudah dikembalikan
-     */
+    // scope untuk peminjaman yang sudah dikembalikan
     public function scopeReturned($query)
     {
         return $query->where('status', 'returned');
     }
 
-    /**
-     * Scope untuk peminjaman terlambat
-     */
+    // scope untuk peminjaman terlambat
     public function scopeOverdue($query)
     {
         return $query->where('status', 'overdue');
     }
 
-    /**
-     * Cek apakah peminjaman bisa diperpanjang
-     */
+    // cek apakah peminjaman bisa diperpanjang
     public function canBeExtended()
     {
         return $this->status === 'borrowed' 
@@ -96,9 +84,7 @@ class Borrow extends Model
         return Carbon::parse($this->due_date)->startOfDay()->diffInDays(Carbon::now()->startOfDay());
     }
 
-    /**
-     * Hitung denda otomatis
-     */
+    // hitung denda otomatis
     public function calculateFine()
     {
         if ($this->status === 'returned') {
@@ -119,9 +105,7 @@ class Borrow extends Model
         return max(0, $totalFine);
     }
 
-    /**
-     * Update status peminjaman yang terlambat secara massal
-     */
+    // update status peminjaman yang terlambat secara massal
     public static function updateOverdueStatuses()
     {
         $overdueBorrows = self::where('status', 'borrowed')
@@ -146,9 +130,7 @@ class Borrow extends Model
         }
     }
 
-    /**
-     * Generate borrow code
-     */
+    // generate borrow code
     public static function generateBorrowCode()
     {
         $today = Carbon::now()->format('Ymd');

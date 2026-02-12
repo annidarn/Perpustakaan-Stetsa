@@ -11,7 +11,7 @@ class Category extends Model
 
     protected $fillable = ['name', 'description'];
 
-    // Relasi ke books (satu kategori punya banyak buku)
+    // relasi ke books (satu kategori punya banyak buku)
     public function books()
     {
         return $this->hasMany(Book::class);
