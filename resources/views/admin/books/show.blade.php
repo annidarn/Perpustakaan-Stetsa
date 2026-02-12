@@ -5,12 +5,12 @@
                 Detail Buku: {{ $book->title }}
             </h2>
             <div class="space-x-2">
-                <a href="{{ route('books.edit', $book) }}" 
+                <a href="{{ route('admin.books.edit', $book) }}" 
                    class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
                     <i class="fas fa-edit mr-2"></i>
                     <span>Edit Buku</span>
                 </a>
-                <a href="{{ route('books.index') }}" 
+                <a href="{{ route('admin.books.index') }}" 
                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali</span>
@@ -172,7 +172,7 @@
                                             
                                             <!-- Tombol Hapus -->
                                             <div class="ml-4">
-                                                <form action="{{ route('books.delete-copy', ['book' => $book, 'copy' => $copy]) }}" method="POST" 
+                                                <form action="{{ route('admin.books.delete-copy', ['book' => $book, 'copy' => $copy]) }}" method="POST" 
                                                       onsubmit="return confirm('Hapus copy No. {{ $copy->formatted_inventory_number }}?')">
                                                     @csrf
                                                     @method('DELETE')
@@ -199,7 +199,7 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
                             <h4 class="text-sm font-medium text-gray-700 mb-3">Aksi Berbahaya</h4>
-                            <form action="{{ route('books.destroy', $book) }}" method="POST" 
+                            <form action="{{ route('admin.books.destroy', $book) }}" method="POST" 
                                   onsubmit="return confirm('HAPUS PERMANEN: Buku \"{{ $book->title }}\" dan semua {{ $book->copies->count() }} copy akan dihapus. Tindakan ini tidak dapat dibatalkan.')">
                                 @csrf
                                 @method('DELETE')

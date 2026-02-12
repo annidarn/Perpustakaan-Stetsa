@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Daftar Kelas
             </h2>
-            <a href="{{ route('classes.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+            <a href="{{ route('admin.classes.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                 <i class="fas fa-plus mr-2"></i> Tambah Kelas
             </a>
         </div>
@@ -56,17 +56,17 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('classes.show', $class) }}" 
+                                            <a href="{{ route('admin.classes.show', $class) }}" 
                                             class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
                                                 <i class="fas fa-eye mr-1"></i>
                                                 <span class="text-sm">Detail</span>
                                             </a>
-                                            <a href="{{ route('classes.edit', $class) }}" 
+                                            <a href="{{ route('admin.classes.edit', $class) }}" 
                                             class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
                                                 <i class="fas fa-edit mr-1"></i>
                                                 <span class="text-sm">Edit</span>
                                             </a>
-                                            <form action="{{ route('classes.destroy', $class) }}" method="POST" 
+                                            <form action="{{ route('admin.classes.destroy', $class) }}" method="POST" 
                                                 class="inline" onsubmit="return confirm('Hapus kelas {{ $class->class_name }}?')">
                                                 @csrf
                                                 @method('DELETE')

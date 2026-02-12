@@ -5,12 +5,12 @@
                 Detail Kelas: {{ $class->class_name }}
             </h2>
             <div class="space-x-2">
-                <a href="{{ route('classes.edit', $class) }}" 
+                <a href="{{ route('admin.classes.edit', $class) }}" 
                    class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
                     <i class="fas fa-edit mr-1"></i>
                     <span>Edit</span>
                 </a>
-                <a href="{{ route('classes.index') }}" 
+                <a href="{{ route('admin.classes.index') }}" 
                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-1"></i>
                     <span>Kembali</span>
@@ -110,7 +110,7 @@
                     
                     <!-- Tombol Hapus -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
-                        <form action="{{ route('classes.destroy', $class) }}" method="POST" 
+                        <form action="{{ route('admin.classes.destroy', $class) }}" method="POST" 
                               onsubmit="return confirm('Hapus kelas {{ $class->class_name }}? Tindakan ini tidak dapat dibatalkan.')">
                             @csrf
                             @method('DELETE')

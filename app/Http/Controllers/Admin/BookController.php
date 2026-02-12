@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Book;
 use App\Models\Category;
@@ -32,14 +34,14 @@ class BookController extends Controller
         $books = $query->orderBy('title')->paginate(10);
         $categories = Category::orderBy('name')->get();
         
-        return view('books.index', compact('books', 'categories'));
+        return view('admin.books.index', compact('books', 'categories'));
     }
 
     // menampilkan formulir untuk membuat data baru
     public function create()
     {
         $categories = Category::orderBy('name')->get();
-        return view('books.create', compact('categories'));
+        return view('admin.books.create', compact('categories'));
     }
 
     // simpan data yang baru dibuat di penyimpanan
@@ -72,7 +74,7 @@ class BookController extends Controller
         // 2. buat copy berdasarkan quantity
         $book->createCopies($request->quantity);
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.index')
             ->with('success', "Buku '{$book->title}' berhasil ditambahkan dengan {$request->quantity} copy.");
     }
 
@@ -80,14 +82,14 @@ class BookController extends Controller
     public function show(Book $book)
     {
         $book->load(['category', 'copies']);
-        return view('books.show', compact('book'));
+        return view('admin.books.show', compact('book'));
     }
 
     // menampilkan formulir untuk mengedit data yang ditentukan
     public function edit(Book $book)
     {
         $categories = Category::orderBy('name')->get();
-        return view('books.edit', compact('book', 'categories'));
+        return view('admin.books.edit', compact('book', 'categories'));
     }
 
     // memperbarui data yang ditentukan dalam penyimpanan
@@ -106,7 +108,7 @@ class BookController extends Controller
 
         $book->update($request->all());
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.index')
             ->with('success', 'Buku berhasil diperbarui.');
     }
 
@@ -124,7 +126,7 @@ class BookController extends Controller
             $message = "Buku '{$bookTitle}' dan {$copyCount} copy berhasil dihapus.";
         }
 
-        return redirect()->route('books.index')
+        return redirect()->route('admin.books.index')
             ->with('success', $message);
     }
     
@@ -132,14 +134,14 @@ class BookController extends Controller
     public function deleteCopy(Book $book, BookCopy $copy)
     {
         if ($copy->status === 'borrowed') {
-            return redirect()->route('books.show', $book)
+            return redirect()->route('admin.books.show', $book)
                 ->with('error', 'Tidak dapat menghapus copy yang sedang dipinjam.');
         }
 
         $inventoryNumber = $copy->formatted_inventory_number;
         $copy->delete();
 
-        return redirect()->route('books.show', $book)
+        return redirect()->route('admin.books.show', $book)
             ->with('success', "Copy No. {$inventoryNumber} berhasil dihapus.");
     }
 }

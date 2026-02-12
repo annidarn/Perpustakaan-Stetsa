@@ -5,12 +5,12 @@
                 Edit Buku: {{ $book->title }}
             </h2>
             <div class="space-x-2">
-                <a href="{{ route('books.show', $book) }}" 
+                <a href="{{ route('admin.books.show', $book) }}" 
                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
                     <i class="fas fa-eye mr-2"></i>
                     <span>Detail Buku</span>
                 </a>
-                <a href="{{ route('books.index') }}" 
+                <a href="{{ route('admin.books.index') }}" 
                    class="inline-flex items-center px-3 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600 shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali</span>
@@ -23,7 +23,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('books.update', $book) }}" method="POST">
+                    <form action="{{ route('admin.books.update', $book) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -156,7 +156,7 @@
                                     </span>
                                 </div>
                                 <div class="flex space-x-4">
-                                    <a href="{{ route('books.show', $book) }}" 
+                                    <a href="{{ route('admin.books.show', $book) }}" 
                                        class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded shadow-sm transition-colors">
                                         Batal
                                     </a>

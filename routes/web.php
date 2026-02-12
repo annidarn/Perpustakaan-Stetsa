@@ -1,11 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ClassController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\MemberController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ClassController;
+use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\TerminalController;
 use App\Http\Controllers\Admin\BorrowController as AdminBorrowController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -27,23 +26,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/auth.php';
 
 // Admin Only Routes
-Route::middleware(['auth', 'admin', 'verified'])->group(function () {
+Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('classes', ClassController::class);
-    Route::resource('books', BookController::class);
+    Route::resource('books', BookController::class)->except(['deleteCopy']); 
     Route::delete('/books/{book}/copies/{copy}', [BookController::class, 'deleteCopy'])->name('books.delete-copy');
     Route::resource('members', MemberController::class);
+    Route::get('/members/promote', [MemberController::class, 'showPromoteForm'])->name('members.promote.form');
+    Route::post('/members/promote', [MemberController::class, 'processPromotion'])->name('members.promote.process');
     Route::patch('/members/{member}/update-status', [MemberController::class, 'updateStatus'])->name('members.update.status');
     Route::post('/members/batch-update', [MemberController::class, 'batchUpdate'])->name('members.batch.update');
     Route::post('/members/batch-delete', [MemberController::class, 'batchDelete'])->name('members.batch.delete');
 
-    // Admin Borrows
-    Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('borrows', AdminBorrowController::class);
-        Route::post('/borrows/{borrow}/extend', [AdminBorrowController::class, 'extend'])->name('borrows.extend');
-        Route::post('/borrows/{borrow}/mark-paid', [AdminBorrowController::class, 'markPaid'])->name('borrows.mark-paid');
-    });
+    // Admin Dashboard & Borrows (nested under admin already by the outer group)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('borrows', AdminBorrowController::class);
+    Route::post('/borrows/{borrow}/extend', [AdminBorrowController::class, 'extend'])->name('borrows.extend');
+    Route::post('/borrows/{borrow}/mark-paid', [AdminBorrowController::class, 'markPaid'])->name('borrows.mark-paid');
 });
 
 // Public/Member Terminal Routes

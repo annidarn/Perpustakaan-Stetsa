@@ -5,11 +5,11 @@
                 Detail Anggota
             </h2>
             <div class="flex space-x-2">
-                <a href="{{ route('members.edit', $member) }}" 
+                <a href="{{ route('admin.members.edit', $member) }}" 
                    class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </a>
-                <a href="{{ route('members.index') }}" 
+                <a href="{{ route('admin.members.index') }}" 
                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
@@ -170,7 +170,7 @@
                                     </a>
                                 @endif
                                 
-                                <form action="{{ route('members.destroy', $member) }}" method="POST" 
+                                <form action="{{ route('admin.members.destroy', $member) }}" method="POST" 
                                       onsubmit="return confirm('Hapus anggota {{ $member->user->name }} secara permanen?')">
                                     @csrf
                                     @method('DELETE')
@@ -182,7 +182,7 @@
                                 </form>
                                 
                                 @if($member->status === 'active')
-                                    <form action="{{ route('members.update.status', $member) }}" method="POST" 
+                                    <form action="{{ route('admin.members.update.status', $member) }}" method="POST" 
                                         onsubmit="return confirm('Nonaktifkan akun {{ $member->user->name }}?')">
                                         @csrf
                                         @method('PATCH')
@@ -194,7 +194,7 @@
                                         </button>
                                     </form>
                                 @elseif($member->status === 'inactive')
-                                    <form action="{{ route('members.update.status', $member) }}" method="POST">
+                                    <form action="{{ route('admin.members.update.status', $member) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="active">
@@ -205,7 +205,7 @@
                                         </button>
                                     </form>
                                 @elseif($member->status === 'graduated' && $member->type === 'student')
-                                    <form action="{{ route('members.update.status', $member) }}" method="POST">
+                                    <form action="{{ route('admin.members.update.status', $member) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="active">

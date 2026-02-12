@@ -18,16 +18,16 @@
                     </x-nav-link>
                     
                     @if(Auth::user()->isAdmin())
-                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                             {{ __('Kategori Buku') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.*')">
+                        <x-nav-link :href="route('admin.classes.index')" :active="request()->routeIs('admin.classes.*')">
                             {{ __('Kelas') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
+                        <x-nav-link :href="route('admin.books.index')" :active="request()->routeIs('admin.books.*')">
                             {{ __('Buku') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
+                        <x-nav-link :href="route('admin.members.index')" :active="request()->routeIs('admin.members.*')">
                             {{ __('Anggota') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.borrows.index')" :active="request()->routeIs('admin.borrows.*')">
@@ -91,16 +91,16 @@
             </x-responsive-nav-link>
             
             @if(Auth::user()->isAdmin())
-                <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                     {{ __('Kategori Buku') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.*')">
+                <x-responsive-nav-link :href="route('admin.classes.index')" :active="request()->routeIs('admin.classes.*')">
                     {{ __('Kelas') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('books.index')" :active="request()->routeIs('books.*')">
+                <x-responsive-nav-link :href="route('admin.books.index')" :active="request()->routeIs('admin.books.*')">
                     {{ __('Buku') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
+                <x-responsive-nav-link :href="route('admin.members.index')" :active="request()->routeIs('admin.members.*')">
                     {{ __('Anggota') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.borrows.index')" :active="request()->routeIs('admin.borrows.*')">

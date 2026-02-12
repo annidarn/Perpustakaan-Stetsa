@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Daftar Anggota
             </h2>
-            <a href="{{ route('members.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+            <a href="{{ route('admin.members.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                 <i class="fas fa-plus mr-2"></i> Tambah Anggota
             </a>
         </div>
@@ -13,7 +13,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Search & Filter -->
-            <form method="GET" action="{{ route('members.index') }}" class="mb-6">
+            <form method="GET" action="{{ route('admin.members.index') }}" class="mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 gap-4">
                     <!-- Search Input -->
                     <div>
@@ -68,7 +68,7 @@
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                             <i class="fas fa-search mr-1"></i> Cari
                         </button>
-                        <a href="{{ route('members.index') }}" 
+                        <a href="{{ route('admin.members.index') }}" 
                            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                             Reset
                         </a>
@@ -77,7 +77,7 @@
             </form>
 
             <div id="batchActions" class="hidden mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
-                <form id="batchUpdateForm" method="POST" action="{{ route('members.batch.update') }}">
+                <form id="batchUpdateForm" method="POST" action="{{ route('admin.members.batch.update') }}">
                     @csrf
                     <div id="updateMembersContainer"></div>
                     
@@ -127,7 +127,7 @@
                 </form>
                 
                 <!-- Delete Form (terpisah untuk CSRF & Method) -->
-                <form id="batchDeleteForm" method="POST" action="{{ route('members.batch.delete') }}" class="hidden">
+                <form id="batchDeleteForm" method="POST" action="{{ route('admin.members.batch.delete') }}" class="hidden">
                     @csrf
                     <div id="deleteMembersContainer"></div>
                 </form>
@@ -225,17 +225,17 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('members.show', $member) }}" 
+                                    <a href="{{ route('admin.members.show', $member) }}" 
                                        class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
                                         <i class="fas fa-eye mr-1"></i>
                                         <span class="text-sm">Detail</span>
                                     </a>
-                                    <a href="{{ route('members.edit', $member) }}" 
+                                    <a href="{{ route('admin.members.edit', $member) }}" 
                                        class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
                                         <i class="fas fa-edit mr-1"></i>
                                         <span class="text-sm">Edit</span>
                                     </a>
-                                    <form action="{{ route('members.destroy', $member) }}" method="POST" 
+                                    <form action="{{ route('admin.members.destroy', $member) }}" method="POST" 
                                           class="inline" onsubmit="return confirm('Hapus anggota {{ $member->user->name }}?')">
                                         @csrf
                                         @method('DELETE')

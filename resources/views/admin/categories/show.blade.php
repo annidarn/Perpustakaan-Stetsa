@@ -5,10 +5,10 @@
                 Detail Kategori: {{ $category->notation }}
             </h2>
             <div class="space-x-2">
-                <a href="{{ route('categories.edit', $category) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                <a href="{{ route('admin.categories.edit', $category) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </a>
-                <a href="{{ route('categories.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+                <a href="{{ route('admin.categories.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
             </div>
@@ -57,7 +57,7 @@
 
                     <!-- Tombol Hapus -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
-                        <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Hapus kategori {{ $category->name }}? Tindakan ini tidak dapat dibatalkan.')">
+                        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Hapus kategori {{ $category->name }}? Tindakan ini tidak dapat dibatalkan.')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">

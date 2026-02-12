@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Kategori Buku
             </h2>
-            <a href="{{ route('categories.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
+            <a href="{{ route('admin.categories.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                 <i class="fas fa-plus mr-2"></i> Tambah Kategori
             </a>
         </div>
@@ -55,21 +55,21 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex space-x-2">
                                             <!-- Tombol Lihat -->
-                                            <a href="{{ route('categories.show', $category) }}" 
+                                            <a href="{{ route('admin.categories.show', $category) }}" 
                                             class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm transition-colors">
                                                 <i class="fas fa-eye mr-1"></i>
                                                 <span class="text-sm">Detail</span>
                                             </a>
                                             
                                             <!-- Tombol Edit -->
-                                            <a href="{{ route('categories.edit', $category) }}" 
+                                            <a href="{{ route('admin.categories.edit', $category) }}" 
                                             class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm transition-colors">
                                                 <i class="fas fa-edit mr-1"></i>
                                                 <span class="text-sm">Edit</span>
                                             </a>
                                             
                                             <!-- Tombol Hapus -->
-                                            <form action="{{ route('categories.destroy', $category) }}" method="POST" 
+                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" 
                                                 class="inline" onsubmit="return confirm('Hapus kategori ini?')">
                                                 @csrf
                                                 @method('DELETE')

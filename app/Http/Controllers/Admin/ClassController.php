@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\ClassModel;
 use Illuminate\Http\Request;
@@ -13,13 +15,13 @@ class ClassController extends Controller
         $classes = ClassModel::orderBy('grade')
             ->orderBy('class_name')
             ->paginate(10);
-        return view('classes.index', compact('classes'));
+        return view('admin.classes.index', compact('classes'));
     }
 
     // manampilkan formulir untuk membuat data baru
     public function create()
     {
-        return view('classes.create');
+        return view('admin.classes.create');
     }
 
     // simpan data yang baru dibuat di penyimpanan
@@ -33,20 +35,20 @@ class ClassController extends Controller
 
         ClassModel::create($request->all());
 
-        return redirect()->route('classes.index')
+        return redirect()->route('admin.classes.index')
             ->with('success', 'Kelas berhasil ditambahkan.');
     }
 
     // menampilkan data yang ditentukan
     public function show(ClassModel $class)
     {
-        return view('classes.show', compact('class'));
+        return view('admin.classes.show', compact('class'));
     }
 
     // menampilkan formulir untuk mengedit data yang ditentukan
     public function edit(ClassModel $class)
     {
-        return view('classes.edit', compact('class'));
+        return view('admin.classes.edit', compact('class'));
     }
 
     // memperbarui data yang ditentukan dalam penyimpanan
@@ -60,7 +62,7 @@ class ClassController extends Controller
 
         $class->update($request->all());
 
-        return redirect()->route('classes.index')
+        return redirect()->route('admin.classes.index')
             ->with('success', 'Kelas berhasil diperbarui.');
     }
 
@@ -69,13 +71,13 @@ class ClassController extends Controller
     {
         // cek apakah kelas punya anggota
         if ($class->members()->count() > 0) {
-            return redirect()->route('classes.index')
+            return redirect()->route('admin.classes.index')
                 ->with('error', 'Tidak dapat menghapus kelas karena masih memiliki anggota.');
         }
 
         $class->delete();
 
-        return redirect()->route('classes.index')
+        return redirect()->route('admin.classes.index')
             ->with('success', 'Kelas berhasil dihapus.');
     }
 }

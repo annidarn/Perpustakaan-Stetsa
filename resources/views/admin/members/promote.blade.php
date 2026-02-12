@@ -10,7 +10,7 @@
                 </p>
             </div>
             <div class="flex space-x-2">
-                <a href="{{ route('members.index') }}" 
+                <a href="{{ route('admin.members.index') }}" 
                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow-sm transition-colors">
                     <i class="fas fa-arrow-left mr-1"></i> Kembali
                 </a>
@@ -85,7 +85,7 @@
                         </div>
                         
                         <div class="mt-4 pt-4 border-t border-green-200">
-                            <a href="{{ route('members.index') }}" 
+                            <a href="{{ route('admin.members.index') }}" 
                             class="inline-flex items-center text-green-700 hover:text-green-900 font-medium">
                                 <i class="fas fa-users mr-2"></i> Lihat Daftar Anggota
                             </a>
@@ -123,7 +123,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h3 class="text-lg font-bold text-gray-700 mb-6">Konfigurasi Naik Kelas</h3>
                     
-                    <form method="POST" action="{{ route('members.promote.process') }}">
+                    <form method="POST" action="{{ route('admin.members.promote.process') }}">
                         @csrf
                         
                         <!-- Kelas Mapping -->
@@ -279,7 +279,7 @@
 
                         <!-- Action Buttons -->
                         <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-                            <a href="{{ route('members.index') }}" 
+                            <a href="{{ route('admin.members.index') }}" 
                                class="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
                                 Batal
                             </a>

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -11,13 +13,13 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::orderBy('notation')->paginate(10);
-        return view('categories.index', compact('categories'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     // menampilkan formulir untuk membuat data baru
     public function create()
     {
-        return view('categories.create');
+        return view('admin.categories.create');
     }
 
     // menyimpan data yang baru dibuat di penyimpanan
@@ -31,20 +33,20 @@ class CategoryController extends Controller
 
         Category::create($request->all());
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     // menampilkan data yang ditentukan
     public function show(Category $category)
     {
-        return view('categories.show', compact('category'));
+        return view('admin.categories.show', compact('category'));
     }
 
     // menampilkan formulir untuk mengedit data yang ditentukan
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return view('admin.categories.edit', compact('category'));
     }
 
     // memperbarui data yang ditentukan dalam penyimpanan
@@ -58,7 +60,7 @@ class CategoryController extends Controller
 
         $category->update($request->all());
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil diperbarui.');
     }
 
@@ -67,13 +69,13 @@ class CategoryController extends Controller
     {
         // cek apakah kategori punya buku
         if ($category->books()->count() > 0) {
-            return redirect()->route('categories.index')
+            return redirect()->route('admin.categories.index')
                 ->with('error', 'Tidak dapat menghapus kategori karena masih memiliki buku.');
         }
 
         $category->delete();
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil dihapus.');
     }
 }

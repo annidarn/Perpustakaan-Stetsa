@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Daftar Buku
             </h2>
-            <a href="{{ route('books.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm flex items-center">
+            <a href="{{ route('admin.books.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-sm flex items-center">
                 <i class="fas fa-plus mr-2"></i> Tambah Buku
             </a>
         </div>
@@ -15,7 +15,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <!-- Search & Filter -->
-                    <form method="GET" action="{{ route('books.index') }}" class="mb-6">
+                    <form method="GET" action="{{ route('admin.books.index') }}" class="mb-6">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <!-- Search Input -->
                             <div>
@@ -46,7 +46,7 @@
                                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     <i class="fas fa-search mr-1"></i> Cari
                                 </button>
-                                <a href="{{ route('books.index') }}" 
+                                <a href="{{ route('admin.books.index') }}" 
                                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-sm">
                                     Reset
                                 </a>
@@ -104,17 +104,17 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('books.show', $book) }}" 
+                                            <a href="{{ route('admin.books.show', $book) }}" 
                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 shadow-sm">
                                                 <i class="fas fa-eye mr-1"></i>
                                                 <span class="text-sm">Detail</span>
                                              </a>
-                                            <a href="{{ route('books.edit', $book) }}" 
+                                            <a href="{{ route('admin.books.edit', $book) }}" 
                                                class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 shadow-sm">
                                                 <i class="fas fa-edit mr-1"></i>
                                                 <span class="text-sm">Edit</span>
                                              </a>
-                                            <form action="{{ route('books.destroy', $book) }}" method="POST" 
+                                            <form action="{{ route('admin.books.destroy', $book) }}" method="POST" 
                                                   class="inline" onsubmit="return confirm('Hapus buku {{ $book->title }}?')">
                                                 @csrf
                                                 @method('DELETE')

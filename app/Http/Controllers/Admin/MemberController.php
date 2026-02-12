@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Member;
 use App\Models\ClassModel;
@@ -46,14 +48,14 @@ class MemberController extends Controller
         $members = $query->orderBy('created_at', 'desc')->paginate(15);
         $classes = ClassModel::orderBy('grade')->orderBy('class_name')->get();
         
-        return view('members.index', compact('members', 'classes'));
+        return view('admin.members.index', compact('members', 'classes'));
     }
 
     // manampilkan formulir untuk membuat data baru
     public function create()
     {
         $classes = ClassModel::orderBy('grade')->orderBy('class_name')->get();
-        return view('members.create', compact('classes'));
+        return view('admin.members.create', compact('classes'));
     }
 
     // simpan data yang baru dibuat di penyimpanan
@@ -125,7 +127,7 @@ class MemberController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('members.index')
+        return redirect()->route('admin.members.index')
             ->with('success', "Anggota {$request->name} berhasil ditambahkan.");
     }
 
@@ -133,7 +135,7 @@ class MemberController extends Controller
     public function show(Member $member)
     {
         $member->load(['user', 'class', 'borrows.bookCopy.book']);
-        return view('members.show', compact('member'));
+        return view('admin.members.show', compact('member'));
     }
 
     // menampilkan formulir promosi (naik kelas massal)
@@ -157,7 +159,7 @@ class MemberController extends Controller
             })->where('type', 'student')->where('status', 'active')->count(),
         ];
         
-        return view('members.promote', compact('classes', 'stats'));
+        return view('admin.members.promote', compact('classes', 'stats'));
     }
 
     // proses promosi massal
@@ -229,14 +231,14 @@ class MemberController extends Controller
                 $message .= "• Backup data telah dibuat<br>";
             }
             
-            return redirect()->route('members.promote.form')
+            return redirect()->route('admin.members.promote.form')
                 ->with('success', $message)
                 ->with('results', $results);
                 
         } catch (\Exception $e) {
             DB::rollBack();
             
-            return redirect()->route('members.promote.form')
+            return redirect()->route('admin.members.promote.form')
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -246,7 +248,7 @@ class MemberController extends Controller
     {
         $classes = ClassModel::orderBy('grade')->orderBy('class_name')->get();
         $member->load('user');
-        return view('members.edit', compact('member', 'classes'));
+        return view('admin.members.edit', compact('member', 'classes'));
     }
 
     // memperbarui data yang ditentukan dalam penyimpanan
@@ -295,7 +297,7 @@ class MemberController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('members.show', $member)
+        return redirect()->route('admin.members.show', $member)
             ->with('success', 'Data anggota berhasil diperbarui.');
     }
 
@@ -307,7 +309,7 @@ class MemberController extends Controller
 
         $member->update(['status' => $request->status]);
 
-        return redirect()->route('members.show', $member)
+        return redirect()->route('admin.members.show', $member)
             ->with('success', "Status anggota berhasil diubah menjadi " . 
                 ($request->status === 'active' ? 'Aktif' : 
                 ($request->status === 'inactive' ? 'Non-Aktif' : 'Lulus')));
@@ -345,11 +347,11 @@ class MemberController extends Controller
             }
             
             DB::commit();
-            return redirect()->route('members.index')->with('success', $message);
+            return redirect()->route('admin.members.index')->with('success', $message);
             
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('members.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->route('admin.members.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -370,7 +372,7 @@ class MemberController extends Controller
         });
         
         if ($hasActiveBorrows) {
-            return redirect()->route('members.index')
+            return redirect()->route('admin.members.index')
                 ->with('error', 'Tidak dapat menghapus anggota yang masih memiliki peminjaman aktif.');
         }
         
@@ -382,12 +384,12 @@ class MemberController extends Controller
             }
             
             DB::commit();
-            return redirect()->route('members.index')
+            return redirect()->route('admin.members.index')
                 ->with('success', count($request->member_ids) . ' anggota berhasil dihapus.');
                 
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('members.index')
+            return redirect()->route('admin.members.index')
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -397,7 +399,7 @@ class MemberController extends Controller
     {
         // cek apakah anggota masih punya peminjaman aktif
         if ($member->borrows()->whereNull('return_date')->exists()) {
-            return redirect()->route('members.index')
+            return redirect()->route('admin.members.index')
                 ->with('error', 'Tidak dapat menghapus anggota yang masih memiliki peminjaman aktif.');
         }
 
@@ -407,7 +409,7 @@ class MemberController extends Controller
         // hapus member
         $member->delete();
 
-        return redirect()->route('members.index')
+        return redirect()->route('admin.members.index')
             ->with('success', 'Anggota berhasil dihapus.');
     }
 
