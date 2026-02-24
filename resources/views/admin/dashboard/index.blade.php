@@ -145,10 +145,46 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
                         </svg>
-                        Distribusi Buku
+                        Kategori Buku
                     </h3>
                     <div class="h-64">
                         <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL CHARTS ROW -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Top 5 Popular Books -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-fire-alt mr-2 text-orange-500"></i>
+                        Paling Banyak Dipinjam
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="popularChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Member Grade Distribution -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-user-tag mr-2 text-indigo-500"></i>
+                        Anggota per Jenjang (Kelas)
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="gradeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Book Copy Status -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-info-circle mr-2 text-emerald-500"></i>
+                        Status Keseluruhan
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="copyStatusChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -260,6 +296,77 @@
                         }
                     },
                     cutout: '70%'
+                }
+            });
+
+            // Popular Books Chart (Horizontal Bar)
+            const ctxPopular = document.getElementById('popularChart').getContext('2d');
+            new Chart(ctxPopular, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode($popularBooks->pluck('title')) !!},
+                    datasets: [{
+                        label: 'Kali Dipinjam',
+                        data: {!! json_encode($popularBooks->pluck('total')) !!},
+                        backgroundColor: '#f59e0b',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+
+            // Grade Distribution Chart (Pie)
+            const ctxGrade = document.getElementById('gradeChart').getContext('2d');
+            new Chart(ctxGrade, {
+                type: 'pie',
+                data: {
+                    labels: {!! json_encode($gradeStats->pluck('grade')) !!},
+                    datasets: [{
+                        data: {!! json_encode($gradeStats->pluck('total')) !!},
+                        backgroundColor: ['#6366f1', '#8b5cf6', '#ec4899'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Copy Status Chart (Doughnut)
+            const ctxCopyStatus = document.getElementById('copyStatusChart').getContext('2d');
+            new Chart(ctxCopyStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tersedia', 'Dipinjam/Terlambat'],
+                    datasets: [{
+                        data: [
+                            {{ $copyStatusStats['available'] }}, 
+                            {{ $copyStatusStats['borrowed'] }}
+                        ],
+                        backgroundColor: ['#10b981', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    cutout: '60%'
                 }
             });
         });

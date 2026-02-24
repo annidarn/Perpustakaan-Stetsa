@@ -68,12 +68,39 @@ class DashboardController extends Controller
             ->having('total', '>', 0)
             ->get();
 
+        // 1. Top 5 Buku Populer (Paling banyak dipinjam)
+        $popularBooks = DB::table('borrows')
+            ->join('book_copies', 'borrows.book_copy_id', '=', 'book_copies.id')
+            ->join('books', 'book_copies.book_id', '=', 'books.id')
+            ->select('books.title', DB::raw('count(borrows.id) as total'))
+            ->groupBy('books.id', 'books.title')
+            ->orderBy('total', 'desc')
+            ->limit(5)
+            ->get();
+
+        // 2. Distribusi Anggota per Grade (X, XI, XII)
+        $gradeStats = DB::table('members')
+            ->join('classes', 'members.class_id', '=', 'classes.id')
+            ->select('classes.grade', DB::raw('count(members.id) as total'))
+            ->groupBy('classes.grade')
+            ->orderBy('classes.grade')
+            ->get();
+
+        // 3. Status Copy Buku (Tersedia vs Dipinjam)
+        $copyStatusStats = [
+            'available' => BookCopy::where('status', 'available')->count(),
+            'borrowed' => BookCopy::whereIn('status', ['borrowed', 'overdue'])->count(),
+        ];
+
         return view('admin.dashboard.index', compact(
             'stats', 
             'dueSoon',
             'chartLabels',
             'chartData',
-            'categoriesStats'
+            'categoriesStats',
+            'popularBooks',
+            'gradeStats',
+            'copyStatusStats'
         ));
     }
 }
