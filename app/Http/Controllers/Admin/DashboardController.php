@@ -8,6 +8,8 @@ use App\Models\Borrow;
 use App\Models\BookCopy;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -37,9 +39,41 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
+        // Data untuk Grafik Peminjaman (7 Hari Terakhir)
+        $borrowTrends = Borrow::select(
+                DB::raw('DATE(borrow_date) as date'),
+                DB::raw('count(*) as count')
+            )
+            ->where('borrow_date', '>=', now()->subDays(6)->startOfDay())
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $chartLabels = [];
+        $chartData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $label = now()->subDays($i)->format('d M');
+            $chartLabels[] = $label;
+            
+            $trend = $borrowTrends->firstWhere('date', $date);
+            $chartData[] = $trend ? $trend->count : 0;
+        }
+
+        // Data untuk Distribusi Buku per Kategori
+        $categoriesStats = DB::table('categories')
+            ->leftJoin('books', 'categories.id', '=', 'books.category_id')
+            ->select('categories.name', DB::raw('count(books.id) as total'))
+            ->groupBy('categories.id', 'categories.name')
+            ->having('total', '>', 0)
+            ->get();
+
         return view('admin.dashboard.index', compact(
             'stats', 
-            'dueSoon'
+            'dueSoon',
+            'chartLabels',
+            'chartData',
+            'categoriesStats'
         ));
     }
 }
