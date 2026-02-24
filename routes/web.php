@@ -40,6 +40,7 @@ Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.'
 
     // Admin Dashboard & Borrows (nested under admin already by the outer group)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/borrows/export', [AdminBorrowController::class, 'export'])->name('borrows.export');
     Route::resource('borrows', AdminBorrowController::class);
     Route::post('/borrows/{borrow}/extend', [AdminBorrowController::class, 'extend'])->name('borrows.extend');
     Route::post('/borrows/{borrow}/mark-paid', [AdminBorrowController::class, 'markPaid'])->name('borrows.mark-paid');

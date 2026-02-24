@@ -10,6 +10,8 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BorrowsExport;
 
 class BorrowController extends Controller
 {
@@ -55,6 +57,47 @@ class BorrowController extends Controller
         $borrows = $query->paginate(20);
         
         return view('admin.borrows.index', compact('borrows'));
+    }
+
+    public function export(Request $request)
+    {
+        $query = Borrow::with(['member.user', 'bookCopy.book']);
+        
+        // Apply filters (Same as index)
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('borrow_code', 'like', "%{$search}%")
+                  ->orWhereHas('member.user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('bookCopy.book', function($bookQuery) use ($search) {
+                      $bookQuery->where('title', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+        
+        if ($request->has('date_from') && $request->date_from != '') {
+            $query->whereDate('borrow_date', '>=', $request->date_from);
+        }
+        
+        if ($request->has('date_to') && $request->date_to != '') {
+            $query->whereDate('borrow_date', '<=', $request->date_to);
+        }
+        
+        $orderBy = $request->get('order_by', 'borrow_date');
+        $orderDir = $request->get('order_dir', 'desc');
+        $query->orderBy($orderBy, $orderDir);
+        
+        $borrows = $query->get();
+
+        $filename = "data-peminjaman-" . now()->format('Y-m-d') . ".xlsx";
+        
+        return Excel::download(new BorrowsExport($borrows), $filename);
     }
 
     public function create()

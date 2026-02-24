@@ -50,18 +50,17 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="GET" action="{{ route('admin.borrows.index') }}">
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                            <!-- Search -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <!-- Row 1: Search, Status, Order -->
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cari Peminjaman</label>
                                 <input type="text" 
                                        name="search" 
                                        value="{{ request('search') }}"
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                                       placeholder="Kode, nama, atau judul buku">
+                                       placeholder="Kode, nama anggota, atau judul buku">
                             </div>
                             
-                            <!-- Status Filter -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                                 <select name="status" 
@@ -72,8 +71,18 @@
                                     <option value="overdue" {{ request('status') == 'overdue' ? 'selected' : '' }}>Terlambat</option>
                                 </select>
                             </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Urutan</label>
+                                <select name="order_by" 
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                                    <option value="borrow_date" {{ request('order_by') == 'borrow_date' ? 'selected' : '' }}>Tanggal Pinjam</option>
+                                    <option value="due_date" {{ request('order_by') == 'due_date' ? 'selected' : '' }}>Jatuh Tempo</option>
+                                    <option value="created_at" {{ request('order_by') == 'created_at' ? 'selected' : '' }}>Terbaru Dibuat</option>
+                                </select>
+                            </div>
                             
-                            <!-- Date From -->
+                            <!-- Row 2: Dates and Actions -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
                                 <input type="date" 
@@ -82,7 +91,6 @@
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
                             </div>
                             
-                            <!-- Date To -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
                                 <input type="date" 
@@ -90,29 +98,19 @@
                                        value="{{ request('date_to') }}"
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
                             </div>
-
-                            <!-- Order By -->
-                            <div class="mt-4 flex items-center space-x-4">
-                                <div class="flex items-center">
-                                    <span class="text-sm text-gray-700 mr-2">Urutkan:</span>
-                                    <select name="order_by" 
-                                            class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-                                        <option value="borrow_date" {{ request('order_by') == 'borrow_date' ? 'selected' : '' }}>Tanggal Pinjam</option>
-                                        <option value="due_date" {{ request('order_by') == 'due_date' ? 'selected' : '' }}>Jatuh Tempo</option>
-                                        <option value="created_at" {{ request('order_by') == 'created_at' ? 'selected' : '' }}>Tanggal Buat</option>
-                                    </select>
-                                </div>
-                            </div>
                                                 
-                            <!-- Action Buttons -->
-                            <div class="flex items-end space-x-2">
+                            <div class="md:col-span-2 flex items-end justify-start space-x-2">
                                 <button type="submit" 
-                                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-sm">
-                                    <i class="fas fa-filter mr-1"></i> Filter
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow-sm transition-all flex items-center">
+                                    <i class="fas fa-filter mr-2"></i> Filter
                                 </button>
                                 <a href="{{ route('admin.borrows.index') }}" 
-                                   class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow-sm">
+                                   class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded shadow-sm transition-all">
                                     Reset
+                                </a>
+                                <a href="{{ route('admin.borrows.export', request()->query()) }}" 
+                                   class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded shadow-sm flex items-center transition-all">
+                                    <i class="fas fa-file-excel mr-2"></i> Export Excel
                                 </a>
                             </div>
                         </div>
