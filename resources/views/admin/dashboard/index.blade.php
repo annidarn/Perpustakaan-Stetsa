@@ -131,8 +131,40 @@
                         <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
                         </svg>
-                        Tren Peminjaman (7 Hari Terakhir)
+                        Tren Peminjaman ({{ $selectedMonthName }} {{ $selectedYear }})
                     </h3>
+                    
+                    <form action="{{ route('admin.dashboard') }}" method="GET" class="mb-4 flex flex-wrap items-end gap-3">
+                        <div>
+                            <label for="month" class="block text-xs font-medium text-gray-700 mb-1">Bulan</label>
+                            @php
+                                $months = [
+                                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+                                    7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                                ];
+                            @endphp
+                            <select name="month" id="month" class="rounded-md border-gray-300 py-1 text-sm focus:border-blue-500 focus:ring-blue-500">
+                                @foreach($months as $num => $name)
+                                    <option value="{{ $num }}" {{ request('month', now()->month) == $num ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="year" class="block text-xs font-medium text-gray-700 mb-1">Tahun</label>
+                            <select name="year" id="year" class="rounded-md border-gray-300 py-1 text-sm focus:border-blue-500 focus:ring-blue-500">
+                                @foreach(range(now()->year - 2, now()->year) as $y)
+                                    <option value="{{ $y }}" {{ request('year', now()->year) == $y ? 'selected' : '' }}>
+                                        {{ $y }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm font-medium transition-colors">
+                            Filter
+                        </button>
+                    </form>
                     <div class="h-64">
                         <canvas id="borrowChart"></canvas>
                     </div>
@@ -263,6 +295,12 @@
                         y: {
                             beginAtZero: true,
                             ticks: { stepSize: 1 }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tanggal'
+                            }
                         }
                     }
                 }

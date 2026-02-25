@@ -39,26 +39,38 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        // Data untuk Grafik Peminjaman (7 Hari Terakhir)
+        // Filter untuk Grafik Peminjaman
+        $month = request('month', now()->month);
+        $year = request('year', now()->year);
+        
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
+        // Data untuk Grafik Peminjaman (Bulan Terpilih)
         $borrowTrends = Borrow::select(
                 DB::raw('DATE(borrow_date) as date'),
                 DB::raw('count(*) as count')
             )
-            ->where('borrow_date', '>=', now()->subDays(6)->startOfDay())
+            ->whereBetween('borrow_date', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
         $chartLabels = [];
         $chartData = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
-            $label = now()->subDays($i)->format('d M');
+        
+        $daysInMonth = $startDate->daysInMonth;
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $currentDate = Carbon::createFromDate($year, $month, $i)->format('Y-m-d');
+            $label = $i;
             $chartLabels[] = $label;
             
-            $trend = $borrowTrends->firstWhere('date', $date);
+            $trend = $borrowTrends->firstWhere('date', $currentDate);
             $chartData[] = $trend ? $trend->count : 0;
         }
+
+        $selectedMonthName = $startDate->translatedFormat('F');
+        $selectedYear = $year;
 
         // Data untuk Distribusi Buku per Kategori
         $categoriesStats = DB::table('categories')
@@ -97,6 +109,8 @@ class DashboardController extends Controller
             'dueSoon',
             'chartLabels',
             'chartData',
+            'selectedMonthName',
+            'selectedYear',
             'categoriesStats',
             'popularBooks',
             'gradeStats',
