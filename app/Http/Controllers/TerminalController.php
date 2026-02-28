@@ -122,6 +122,11 @@ class TerminalController extends Controller
             DB::commit();
 
             // pesan berhasil
+            $message = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+            $message .= "PROSES PEMINJAMAN BERHASIL\n";
+            $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+            $message .= "BUKU     : " . $book->title . "\n";
+            $message .= "ANGGOTA  : " . $member->user->name . "\n";
             $message .= "TEMPO    : " . Carbon::now()->addDays(7)->format('d/m/Y') . "\n";
             $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
             $message .= "💡 INFORMASI:\n";
