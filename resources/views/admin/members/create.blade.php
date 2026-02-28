@@ -80,7 +80,7 @@
                                 <input type="text" name="nis" id="nis" 
                                        value="{{ old('nis') }}"
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                                       placeholder="Kosongkan untuk auto-generate">
+                                       placeholder="Wajib Diisi">
                                 <p class="mt-1 text-sm text-gray-500">Hanya untuk siswa</p>
                                 @error('nis')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -95,7 +95,7 @@
                                 <input type="text" name="nip" id="nip" 
                                        value="{{ old('nip') }}"
                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                                       placeholder="Kosongkan untuk auto-generate">
+                                       placeholder="Wajib Diisi">
                                 <p class="mt-1 text-sm text-gray-500">Untuk guru/staff</p>
                                 @error('nip')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -133,7 +133,7 @@
                                    value="{{ old('enrollment_year', date('Y')) }}"
                                    min="2000" max="{{ date('Y') + 1 }}"
                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-                            <p class="mt-1 text-sm text-gray-500">Tahun masuk sekolah (otomatis tahun ini)</p>
+                            <p class="mt-1 text-sm text-gray-500">Tahun masuk sekolah</p>
                             @error('enrollment_year')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
