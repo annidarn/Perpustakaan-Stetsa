@@ -76,7 +76,7 @@
         </div>
 
         @if(session('success'))
-        <div class="mb-6 bg-green-50 border-2 border-green-500 rounded-xl p-6 shadow-lg">
+        <div class="mb-6 bg-green-50 border-2 border-green-500 rounded-xl p-6 shadow-lg animate-slide-in">
             <div class="flex items-start">
                 <div class="flex-shrink-0 mr-4">
                     <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -126,25 +126,69 @@
                 </div>
             </div>
         </div>
+        @endif
+
+        @if(session('error') || $errors->any())
+        <div class="mb-6 bg-red-50 border-2 border-red-500 rounded-xl p-6 shadow-lg animate-slide-in">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 mr-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                    </div>
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold text-red-800 mb-2">GAGAL MEMPROSES!</h3>
+                    <div class="text-red-700">
+                        @if(session('error'))
+                            {{ session('error') }}
+                        @endif
+                        
+                        @if($errors->any())
+                            <ul class="list-disc pl-5 mt-2">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <script>
             // Auto-scroll ke notif
             document.addEventListener('DOMContentLoaded', function() {
-                const notif = document.querySelector('.bg-green-50');
-                if (notif) {
-                    notif.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const successNotif = document.querySelector('.bg-green-50');
+                const errorNotif = document.querySelector('.bg-red-50');
+                
+                if (successNotif) {
+                    successNotif.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     
                     // Highlight kode dengan animasi
                     const codeElement = document.querySelector('.text-3xl.font-mono');
-                    codeElement.classList.add('animate-pulse');
-                    setTimeout(() => {
-                        codeElement.classList.remove('animate-pulse');
-                    }, 3000);
+                    if (codeElement) {
+                        codeElement.classList.add('animate-pulse');
+                        setTimeout(() => {
+                            codeElement.classList.remove('animate-pulse');
+                        }, 3000);
+                    }
+                } else if (errorNotif) {
+                    errorNotif.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         </script>
 
         <style>
+            .animate-slide-in {
+                animation: slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            
+            @keyframes slide-in {
+                from { transform: translateY(-20px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+
             .animate-pulse {
                 animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
             }
@@ -154,7 +198,6 @@
                 50% { opacity: 0.7; }
             }
         </style>
-        @endif
 
         @if(!session('success'))
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
