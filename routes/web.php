@@ -31,6 +31,7 @@ Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.'
     Route::resource('classes', ClassController::class);
     Route::resource('books', BookController::class)->except(['deleteCopy']); 
     Route::delete('/books/{book}/copies/{copy}', [BookController::class, 'deleteCopy'])->name('books.delete-copy');
+    Route::post('/members/import', [MemberController::class, 'import'])->name('members.import');
     Route::resource('members', MemberController::class);
     Route::get('/members/promote', [MemberController::class, 'showPromoteForm'])->name('members.promote.form');
     Route::post('/members/promote', [MemberController::class, 'processPromotion'])->name('members.promote.process');

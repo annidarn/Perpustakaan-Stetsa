@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\MemberImport;
 
 class MemberController extends Controller
 {
@@ -129,6 +131,36 @@ class MemberController extends Controller
 
         return redirect()->route('admin.members.index')
             ->with('success', "Anggota {$request->name} berhasil ditambahkan.");
+    }
+
+    // import data dari excel
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        try {
+            Excel::import(new MemberImport, $request->file('file'));
+            
+            return redirect()->route('admin.members.index')
+                ->with('success', 'Data anggota berhasil di-import.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMsg = "Ada masalah pada data Excel Anda:<br><br>";
+            
+            foreach ($failures as $failure) {
+                $row = $failure->row(); // row that went wrong
+                $errors = implode(', ', $failure->errors());
+                $errorMsg .= "• <b>Baris {$row}</b>: {$errors}<br>";
+            }
+            
+            return redirect()->route('admin.members.index')
+                ->with('error', $errorMsg);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.members.index')
+                ->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
     }
 
     // menampilkan data yang ditentukan
