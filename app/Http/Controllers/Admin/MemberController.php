@@ -76,8 +76,10 @@ class MemberController extends Controller
         ]);
 
         // 1. membuat user baru
+        $username = $request->nis ?: ($request->nip ?: Str::random(10));
         $user = User::create([
             'name' => $request->name,
+            'username' => $username,
             'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
             'password' => Hash::make('password123'),
             'email_verified_at' => now(), // memverifikasi otomatis akun member yang dibuat admin

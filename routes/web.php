@@ -49,7 +49,7 @@ Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.'
 });
 
 // Public/Member Terminal Routes
-Route::prefix('terminal')->name('terminal.')->group(function () {
+Route::middleware(['auth'])->prefix('terminal')->name('terminal.')->group(function () {
     Route::get('/', [TerminalController::class, 'index'])->name('index');
     Route::get('/search', [TerminalController::class, 'search'])->name('search');
     Route::post('/validate-member', [TerminalController::class, 'validateMember'])->name('validate.member');

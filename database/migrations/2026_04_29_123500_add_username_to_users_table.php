@@ -15,10 +15,20 @@ return new class extends Migration
             $table->string('username')->nullable()->unique()->after('name');
         });
 
-        // Otomatis isi username untuk user yang sudah ada (diambil dari prefix email)
-        \App\Models\User::all()->each(function ($user) {
+        // Otomatis isi username: Gunakan NIS/NIP jika ada, jika tidak gunakan prefix email
+        \App\Models\User::with('member')->get()->each(function ($user) {
             if (empty($user->username)) {
-                $user->username = explode('@', $user->email)[0];
+                $username = null;
+                
+                if ($user->member) {
+                    $username = $user->member->nis ?: $user->member->nip;
+                }
+                
+                if (empty($username)) {
+                    $username = explode('@', $user->email)[0];
+                }
+
+                $user->username = $username;
                 $user->save();
             }
         });

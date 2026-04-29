@@ -15,7 +15,14 @@ class TerminalController extends Controller
     // menampilkan halaman terminal utama
     public function index()
     {
-        return view('terminal.index');
+        $member = auth()->user()->member;
+        
+        // Jika admin masuk ke terminal, berikan peringatan atau biarkan saja tapi member null
+        if (auth()->user()->isAdmin()) {
+            return view('terminal.index', ['member' => null]);
+        }
+
+        return view('terminal.index', compact('member'));
     }
 
     // pencarian buku untuk peminjaman
@@ -44,12 +51,19 @@ class TerminalController extends Controller
             })
             ->paginate(10);
 
-        return view('terminal.search-results', compact('books'));
+        $member = auth()->user()->member;
+        return view('terminal.search-results', compact('books', 'member'));
     }
 
     // menampilkan formulir peminjaman setelah validasi anggota
     public function showBorrowForm(Member $member, Book $book)
     {
+        // Keamanan: Pastikan anggota hanya bisa meminjam untuk dirinya sendiri
+        if (!auth()->user()->isAdmin() && auth()->user()->member->id !== $member->id) {
+            return redirect()->route('terminal.index')
+                ->with('error', 'Akses ditolak. Anda hanya bisa melakukan peminjaman untuk akun Anda sendiri.');
+        }
+
         // validasi: cek apakah member bisa meminjam
         $validation = $this->validateMemberForBorrow($member);
         
@@ -74,6 +88,12 @@ class TerminalController extends Controller
     // proses peminjaman buku
     public function processBorrow(Request $request, Member $member)
     {
+        // Keamanan: Pastikan anggota hanya bisa meminjam untuk dirinya sendiri
+        if (!auth()->user()->isAdmin() && auth()->user()->member->id !== $member->id) {
+            return redirect()->route('terminal.index')
+                ->with('error', 'Akses ditolak.');
+        }
+
         $request->validate([
             'book_id' => 'required|exists:books,id',
             'book_copy_id' => 'required|exists:book_copies,id',

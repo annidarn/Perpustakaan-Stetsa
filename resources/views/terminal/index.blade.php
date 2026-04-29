@@ -48,15 +48,36 @@
 <body class="flex items-center justify-center min-h-screen p-4">
     <div class="terminal-card w-full max-w-4xl p-8 md:p-12">
         <!-- Header -->
-        <div class="text-center mb-10">
-            <div class="flex justify-center mb-4">
-               <x-application-logo style="width: 53px; height: 53px;" />
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+            <div class="text-left">
+                <h1 class="text-3xl font-bold text-gray-800 mb-1">
+                    Halo, {{ $member->user->name }}!
+                </h1>
+                <p class="text-gray-600">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded uppercase">
+                        {{ $member->type }}
+                    </span>
+                    <span class="ml-2">NIS/NIP: {{ $member->nis ?: $member->nip }}</span>
+                </p>
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                Peminjaman Buku
-            </h1>
-            <p class="text-gray-600">
-                Sistem peminjaman buku perpustakaan SMA Negeri 4 Malang
+            <div class="flex gap-2">
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                        <i class="fas fa-user-shield mr-2"></i> Admin Panel
+                    </a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Keluar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="text-center mb-10">
+            <p class="text-gray-600 text-lg">
+                Silakan cari buku yang ingin Anda pinjam hari ini.
             </p>
         </div>
 

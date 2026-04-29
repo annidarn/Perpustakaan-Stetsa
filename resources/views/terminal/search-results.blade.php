@@ -161,10 +161,17 @@
                             
                             <!-- Action Buttons -->
                             <div class="flex space-x-2">
-                                <button onclick="showBorrowModal('{{ $book->id }}', '{{ addslashes($book->title) }}')"
-                                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium text-center shadow-sm transition-colors">
-                                    <i class="fas fa-cart-plus mr-2"></i> Pinjam Buku
-                                </button>
+                                @if(isset($member) && $member)
+                                    <a href="{{ route('terminal.borrow.form', ['member' => $member->id, 'book' => $book->id]) }}"
+                                       class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium text-center shadow-sm transition-colors">
+                                        <i class="fas fa-cart-plus mr-2"></i> Pinjam Buku
+                                    </a>
+                                @else
+                                    <button onclick="showBorrowModal('{{ $book->id }}', '{{ addslashes($book->title) }}')"
+                                            class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium text-center shadow-sm transition-colors">
+                                        <i class="fas fa-cart-plus mr-2"></i> Pinjam Buku
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
