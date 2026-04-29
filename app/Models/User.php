@@ -13,6 +13,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'email_verified_at',
@@ -28,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -38,11 +40,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function isAdmin()
     {
-        return $this->email === 'admin@perpustakaan.test' || $this->email === 'admin@perpustakaan.sch.id';
+        return (bool) ($this->is_admin ?? false);
     }
 
-    public function getIsAdminAttribute()
-    {
-        return $this->isAdmin();
-    }
+
 }

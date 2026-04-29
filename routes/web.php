@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\TerminalController;
 use App\Http\Controllers\Admin\BorrowController as AdminBorrowController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
