@@ -72,6 +72,12 @@
                                             </div>
                                         </div>
                                         <div>
+                                            <div class="text-sm text-gray-500">Username Login</div>
+                                            <div class="font-medium font-mono text-blue-600">
+                                                {{ $member->user->username }}
+                                            </div>
+                                        </div>
+                                        <div>
                                             <div class="text-sm text-gray-500">Jenis Kelamin</div>
                                             <div class="font-medium">
                                                 {{ $member->gender == 'L' ? 'Laki-laki' : ($member->gender == 'P' ? 'Perempuan' : '-') }}

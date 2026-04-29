@@ -35,6 +35,48 @@
                             @enderror
                         </div>
 
+                        <!-- Account Information -->
+                        <div class="mb-6">
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                                Username <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="username" id="username" 
+                                   value="{{ old('username', $member->user->username) }}"
+                                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                   required>
+                            @error('username')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-6">
+                            <h4 class="font-bold text-yellow-800 mb-2">Ganti Password (Opsional)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Password Baru
+                                    </label>
+                                    <input type="password" name="password" id="password" 
+                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                           placeholder="Kosongkan jika tidak diubah">
+                                    @error('password')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Konfirmasi Password Baru
+                                    </label>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" 
+                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                           placeholder="Ulangi password baru">
+                                </div>
+                            </div>
+                            <p class="text-xs text-yellow-700 mt-2">
+                                <i class="fas fa-info-circle mr-1"></i> Jika anggota lupa password, Anda bisa meresetnya di sini. Minimal 8 karakter.
+                            </p>
+                        </div>
+
                         <!-- Email Status -->
                         <div class="mb-6">
                             <label class="inline-flex items-center cursor-pointer">

@@ -290,6 +290,8 @@ class MemberController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $member->user_id,
+            'password' => 'nullable|string|min:8|confirmed',
             'nis' => 'nullable|string|max:20|unique:members,nis,' . $member->id,
             'nip' => 'nullable|string|max:20|unique:members,nip,' . $member->id,
             'class_id' => 'nullable|exists:classes,id',
@@ -300,11 +302,20 @@ class MemberController extends Controller
             'status' => 'required|in:active,inactive,graduated',
         ]);
 
-        // memperbarui nama pengguna dan status verifikasi email
-        $member->user->update([
+        // data dasar user
+        $userData = [
             'name' => $request->name,
+            'username' => $request->username,
             'email_verified_at' => $request->has('email_verified') ? ($member->user->email_verified_at ?? now()) : null,
-        ]);
+        ];
+
+        // update password jika diisi
+        if ($request->filled('password')) {
+            $userData['password'] = Hash::make($request->password);
+        }
+
+        // memperbarui nama pengguna, username dan status verifikasi email
+        $member->user->update($userData);
 
         // menangani NIS/NIP berdasarkan tipenya
         $nis = $request->nis;
