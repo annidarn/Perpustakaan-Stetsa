@@ -64,13 +64,9 @@ class TerminalController extends Controller
                 ->with('error', 'Akses ditolak. Anda hanya bisa melakukan peminjaman untuk akun Anda sendiri.');
         }
 
-        // validasi: cek apakah member bisa meminjam
+        // validasi tetap ada tapi tidak me-redirect di awal (akan dicek saat submit)
+        // ini agar siswa bisa tetap melihat form detail buku
         $validation = $this->validateMemberForBorrow($member);
-        
-        if (!$validation['can_borrow'] && !session('success')) {
-            return redirect()->route('terminal.index')
-                ->with('error', $validation['message']);
-        }
 
         // mendapatkan copy buku ini yang tersedia
         $availableCopies = BookCopy::where('book_id', $book->id)
