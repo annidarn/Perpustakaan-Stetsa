@@ -51,13 +51,17 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
             <div class="text-left">
                 <h1 class="text-3xl font-bold text-gray-800 mb-1">
-                    Halo, {{ $member->user->name }}!
+                    Halo, {{ $member ? $member->user->name : auth()->user()->name }}!
                 </h1>
                 <p class="text-gray-600">
                     <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded uppercase">
-                        {{ $member->type }}
+                        {{ $member ? $member->type : 'Admin' }}
                     </span>
-                    <span class="ml-2">NIS/NIP: {{ $member->nis ?: $member->nip }}</span>
+                    @if($member)
+                        <span class="ml-2">NIS/NIP: {{ $member->nis ?: $member->nip }}</span>
+                    @else
+                        <span class="ml-2">Petugas Perpustakaan</span>
+                    @endif
                 </p>
             </div>
             <div class="flex gap-2">

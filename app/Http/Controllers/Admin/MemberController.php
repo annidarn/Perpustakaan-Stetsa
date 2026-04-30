@@ -75,17 +75,7 @@ class MemberController extends Controller
             'status' => 'required|in:active,inactive,graduated',
         ]);
 
-        // 1. membuat user baru
-        $username = $request->nis ?: ($request->nip ?: Str::random(10));
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $username,
-            'email' => $this->generateEmail($request->nis, $request->nip, $request->type),
-            'password' => Hash::make('password123'),
-            'email_verified_at' => now(), // memverifikasi otomatis akun member yang dibuat admin
-        ]);
-
-        // 2. NIS akan dibuat secara otomatis jika kosong dan tipenya adalah siswa
+        // 1. NIS akan dibuat secara otomatis jika kosong dan tipenya adalah siswa
         $nis = $request->nis;
         if (empty($nis) && $request->type === 'student') {
             $nis = $this->generateNIS();
@@ -96,7 +86,7 @@ class MemberController extends Controller
             $nis = null;
         }
 
-        // 3. auto-generate NIP jika kosong dan tipe nya guru/staff
+        // 2. auto-generate NIP jika kosong dan tipe nya guru/staff
         $nip = $request->nip;
         if (empty($nip) && in_array($request->type, ['teacher', 'staff'])) {
             $nip = $this->generateNIP($request->type);
@@ -107,7 +97,7 @@ class MemberController extends Controller
             $nip = null;
         }
 
-        // 4. menetapkan tahun pendaftaran secara otomatis untuk siswa baru
+        // 3. menetapkan tahun pendaftaran secara otomatis untuk siswa baru
         $enrollmentYear = $request->enrollment_year;
         if (empty($enrollmentYear) && $request->type === 'student') {
             $enrollmentYear = date('Y');
@@ -117,6 +107,16 @@ class MemberController extends Controller
         if ($request->type !== 'student') {
             $enrollmentYear = null;
         }
+
+        // 4. membuat user baru menggunakan NIS/NIP sebagai username
+        $username = $nis ?: ($nip ?: Str::random(10));
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $username,
+            'email' => $this->generateEmail($nis, $nip, $request->type),
+            'password' => Hash::make('password123'),
+            'email_verified_at' => now(), // memverifikasi otomatis akun member yang dibuat admin
+        ]);
 
         // 5. buat member
         $member = Member::create([

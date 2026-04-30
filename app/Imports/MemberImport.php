@@ -51,6 +51,7 @@ class MemberImport implements ToModel, WithHeadingRow, WithValidation
             if (!$user) {
                 $user = User::create([
                     'name' => $row['nama'],
+                    'username' => $nis ?: ($nip ?: Str::random(10)),
                     'email' => $email,
                     'password' => Hash::make('password123'),
                     'email_verified_at' => now(),
