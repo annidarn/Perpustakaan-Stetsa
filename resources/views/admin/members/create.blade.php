@@ -210,6 +210,21 @@
                             @enderror
                         </div>
 
+                        <!-- Password -->
+                        <div class="mb-8">
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                                Password Akun
+                            </label>
+                            <input type="text" name="password" id="password" 
+                                   value="{{ old('password', 'password123') }}"
+                                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                   placeholder="Default: password123">
+                            <p class="mt-1 text-sm text-gray-500">Admin bisa menentukan password awal, atau biarkan default 'password123'</p>
+                            @error('password')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Form Actions -->
                         <div class="flex justify-end space-x-4">
                             <a href="{{ route('admin.members.index') }}" 

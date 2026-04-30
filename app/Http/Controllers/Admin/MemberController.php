@@ -73,6 +73,7 @@ class MemberController extends Controller
             'gender' => 'nullable|in:L,P',
             'type' => 'required|in:student,teacher,staff',
             'status' => 'required|in:active,inactive,graduated',
+            'password' => 'nullable|string|min:8',
         ]);
 
         // 1. NIS akan dibuat secara otomatis jika kosong dan tipenya adalah siswa
@@ -114,7 +115,7 @@ class MemberController extends Controller
             'name' => $request->name,
             'username' => $username,
             'email' => $this->generateEmail($nis, $nip, $request->type),
-            'password' => Hash::make('password123'),
+            'password' => Hash::make($request->password ?: 'password123'),
             'email_verified_at' => now(), // memverifikasi otomatis akun member yang dibuat admin
         ]);
 
